@@ -1,0 +1,89 @@
+name: Deploy PMB via FTP
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pmb-production-ftp
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Validate PHP syntax
+        run: find . -type f -name '*.php' -not -path './.git/*' -print0 | xargs -0 -n 1 php -l
+
+      - name: Validate deployment settings
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          FTP_SERVER_DIR: ${{ secrets.FTP_SERVER_DIR }}
+        run: |
+          for setting in FTP_SERVER FTP_USERNAME FTP_PASSWORD FTP_SERVER_DIR; do
+            if [ -z "${!setting}" ]; then
+              echo "::error::GitHub Secret $setting belum diisi. Lihat README.md."
+              exit 1
+            fi
+          done
+          if [[ "$FTP_SERVER_DIR" != */ ]]; then
+            echo "::error::FTP_SERVER_DIR harus diakhiri dengan /."
+            exit 1
+          fi
+
+      - name: Upload website
+        uses: SamKirkland/FTP-Deploy-Action@v4.4.0
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: ${{ secrets.FTP_SERVER_DIR }}
+          local-dir: ./
+          dangerous-clean-slate: false
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/.github/**
+            **/README*
+            **/*.md
+            **/node_modules/**
+            **/vendor/**
+            **/.env*
+            **/config.local.php
+            **/config.example.php
+            **/credentials*
+            **/*.pem
+            **/*.key
+            **/*.log
+            **/*.bak
+            **/*.backup
+            **/*.old
+            **/backup/**
+            **/backups/**
+            **/cache/**
+            **/.cache/**
+            **/tmp/**
+            **/temp/**
+            **/.verification/**
+            **/.vscode/**
+            **/.idea/**
+            **/.codex/**
+            **/.agents/**
+            **/.aws/**
+            **/data/sessions/**
+            **/sess_*
+            **/data/**/*.json
+            **/peserta.json
+            **/dokumen.json
+            **/toggle.php
+            **/uploads/**
