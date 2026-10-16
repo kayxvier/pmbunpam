@@ -40,3 +40,12 @@ backup/
 /.vscode/
 .DS_Store
 Thumbs.db
+
+# Self-hosted visitor counter runtime data
+/counter/config.php
+/counter/counter.db*
+/counter/cache/
+/counter/storage/
+*.mmdb
+*.db
+*.db-*

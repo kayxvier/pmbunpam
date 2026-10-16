@@ -204,3 +204,61 @@
       .catch(function () { /* Situs tetap dapat dipakai dengan nilai bawaan. */ });
   }
 })();
+
+// Counter berjalan setelah load dan tidak menahan render halaman atau peta.
+(function () {
+  'use strict';
+  var file = (location.pathname.split('/').pop() || 'index.php').toLowerCase();
+  if (file === 'admin.php' || file === 'site-config.php') return;
+  var script = document.currentScript;
+  if (!script || !script.src) return;
+  var base = new URL('../counter/', script.src);
+  function render(data) {
+    var panel = document.getElementById('pmbVisitorsData');
+    if (!panel || !data || !data.available || !Array.isArray(data.countries) || !data.countries.length) return;
+    var content = panel.querySelector('.pmb-counter-content');
+    var list = document.createElement('ul');
+    list.className = 'pmb-counter-list';
+    var format = new Intl.NumberFormat('id-ID');
+    data.countries.slice(0, 10).forEach(function (country) {
+      if (!/^[A-Z]{2}$/.test(country.code) || !Number.isSafeInteger(country.n) || country.n <= 0) return;
+      var item = document.createElement('li');
+      var flag = document.createElement('img');
+      flag.src = 'https://flagcdn.com/24x18/' + country.code.toLowerCase() + '.png';
+      flag.alt = country.name;
+      flag.width = 24;
+      flag.height = 18;
+      flag.loading = 'lazy';
+      // Dimensi tetap dipertahankan jika CDN gambar tidak tersedia.
+      flag.addEventListener('error', function () { this.style.visibility = 'hidden'; }, { once: true });
+      var number = document.createElement('span');
+      number.textContent = format.format(country.n);
+      item.title = country.name + ': ' + number.textContent;
+      item.appendChild(flag);
+      item.appendChild(number);
+      list.appendChild(item);
+    });
+    if (!list.children.length) return;
+    var totals = document.createElement('p');
+    totals.className = 'pmb-counter-totals';
+    [['Total pengunjung', data.total], ['Pageviews', data.pageviews]].forEach(function (entry) {
+      var line = document.createElement('span');
+      line.textContent = entry[0] + ': ' + format.format(entry[1]);
+      totals.appendChild(line);
+    });
+    content.replaceChildren(list, totals);
+  }
+  function start() {
+    // Satu POST untuk setiap navigasi halaman publik yang memuat site.js.
+    fetch(new URL('track.php', base), { method: 'POST', credentials: 'same-origin', cache: 'no-store' })
+      .catch(function () { /* Counter tidak boleh mengganggu halaman. */ })
+      .then(function () {
+        if (!document.getElementById('pmbVisitorsData')) return;
+        return fetch(new URL('data.php', base), { credentials: 'same-origin', cache: 'no-store' })
+          .then(function (response) { return response.ok ? response.json() : null; })
+          .then(render);
+      }).catch(function () { /* Teks fallback awal tetap ditampilkan. */ });
+  }
+  if (document.readyState === 'complete') start();
+  else window.addEventListener('load', start, { once: true });
+})();

@@ -1,5 +1,10 @@
 # PMB Universitas Pamulang
 
+Counter kini memakai PHP/SQLite sendiri. Ikuti [setup counter dan impor AWStats](counter/README.md)
+untuk membuat konfigurasi privat, memasang GeoLite2 opsional, mengimpor data asli,
+dan memeriksa perlindungan database. Bagian Flag Counter di bawah adalah catatan
+implementasi sebelumnya, bukan layanan counter yang dipakai saat ini.
+
 Website PHP dengan penyimpanan JSON, tanpa database, Composer, atau build Node.
 Jalankan lokal dengan `php -S 127.0.0.1:8080`, lalu buka `/front.php`
 untuk halaman dengan peta sebaran mahasiswa. `/index.php` adalah halaman utama

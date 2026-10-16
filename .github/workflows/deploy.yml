@@ -41,6 +41,9 @@ jobs:
             exit 1
           fi
 
+      - name: Test visitor counter
+        run: php tests/counter_test.php
+
       - name: Upload website
         uses: SamKirkland/FTP-Deploy-Action@v4.4.0
         with:
@@ -87,3 +90,12 @@ jobs:
             **/dokumen.json
             **/toggle.php
             **/uploads/**
+            **/counter/config.php
+            **/counter/counter.db*
+            **/counter/cache/**
+            **/counter/storage/**
+            **/*.db
+            **/*.db-*
+            **/*.mmdb
+            **/counter/seed.php
+            **/tests/**
