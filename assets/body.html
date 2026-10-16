@@ -1,0 +1,355 @@
+<div id="pmb-app">
+
+  <!-- ===================== HERO ===================== -->
+  <section class="pmb-hero">
+    <div class="pmb-hero-bg" id="pmbHeroBg">
+      <div class="slide on" data-pmb-background="hero_1" style="background-image:url('https://simaba.my.id/assets/img/KAMPUS1.webp')"></div>
+      <div class="slide" data-pmb-background="hero_2" style="background-image:url('https://simaba.my.id/assets/img/KAMPUS2.webp')"></div>
+      <div class="slide" data-pmb-background="hero_3" style="background-image:url('https://simaba.my.id/assets/img/KAMPUS3.webp')"></div>
+      <div class="slide" data-pmb-background="hero_4" style="background-image:url('https://simaba.my.id/assets/img/KAMPUS4.webp')"></div>
+    </div>
+    <div class="pmb-hero-veil"></div>
+    <div class="pmb-hero-glow"></div>
+    <div class="pmb-wrap">
+      <div class="pmb-hero-inner">
+        <div class="pmb-hero-text">
+          <img class="pmb-site-logo" data-pmb-logo src="" alt="Logo" hidden>
+          <span class="pmb-badge" data-pmb-text="hero_badge"></span>
+          <h1 class="pmb-h1"><span data-pmb-text="hero_title_main">Penerimaan</span><span class="g" data-pmb-text="hero_title_highlight">Mahasiswa Baru</span><span class="u" data-pmb-text="hero_title_org">Universitas Pamulang</span></h1>
+          <p data-pmb-text="hero_description">Bergabung bersama ribuan mahasiswa dari Sabang sampai Merauke dan berbagai negara. Kuliah berkualitas, biaya terjangkau, dan jaringan alumni yang luas.</p>
+          <div class="pmb-hero-btns">
+            <a class="pmb-btn gold" data-pmb-button="hero_register" href="#pmb-portal"><span data-pmb-label>🚀 Daftar Sekarang</span></a>
+            <a class="pmb-btn ghost" data-pmb-button="hero_programs" href="https://unpam.web.id/" target="_blank" rel="noopener"><span data-pmb-label>Lihat Program Studi →</span></a>
+          </div>
+          <div class="pmb-hero-dots" id="pmbHeroDots">
+            <i class="on"></i><i></i><i></i><i></i>
+          </div>
+        </div>
+        <div class="pmb-hero-photo">
+          <div class="ring"></div>
+          <img data-pmb-image="hero_person" src="https://simaba.my.id/assets/img/orang.png" alt="Mahasiswa Universitas Pamulang" loading="lazy">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== SEBARAN MAHASISWA (MAP) ===================== -->
+  <div class="pmb-wrap pmb-stats-wrap">
+    <div class="pmb-sebaran pmb-rv">
+      <div class="pmb-sebaran-top">
+        <div class="pmb-sebaran-title">
+          <span class="pmb-kick">🗺️ Sebaran Nasional</span>
+          <h3>Sebaran Mahasiswa Universitas Pamulang</h3>
+        </div>
+        <div class="pmb-sebaran-badges">
+          <div class="bdg"><span class="ic">🎓</span><div><b>110.000+</b><span>Mahasiswa Aktif</span></div></div>
+          <div class="bdg gold"><span class="ic">📚</span><div><b>40+</b><span>Program Studi</span></div></div>
+        </div>
+      </div>
+      <div class="pmb-idmap-wrap">
+        <div id="pmbSebaranMap"></div>
+        <div class="pmb-idmap-scale"><span>Sedikit</span><i class="s1"></i><i class="s2"></i><i class="s3"></i><i class="s4"></i><i class="s5"></i><i class="s6"></i><span>Terbanyak</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== PORTAL LAYANAN ===================== -->
+  <section class="pmb-sec" id="pmb-portal">
+    <div class="pmb-wrap">
+      <div class="pmb-head pmb-rv">
+        <span class="pmb-kick">🛟 Portal Layanan</span>
+          <h2 class="pmb-title" data-pmb-text="portal_title">Semua Kebutuhan PMB dalam Satu Tempat</h2>
+          <p class="pmb-sub" data-pmb-text="portal_subtitle">Akses cepat ke layanan pendaftaran, verifikasi, dan informasi resmi PMB Universitas Pamulang.</p>
+      </div>
+      <div class="pmb-portal-grid pmb-rv">
+<a class="pmb-svc feat gold" href="https://rl-pmb.unpam.ac.id/" target="_blank" rel="noopener"><div class="ic">🚀</div><b>Daftar Online</b><span>Daftar Maba lewat Website PMB</span></a>
+       <div class="pmb-svc feat gold" data-pmb-button="portal_gform" style="cursor:pointer" onclick="pmbOpenGform()"><div class="ic">📝</div><b data-pmb-label>Daftar G-Form</b><span>Pilih lokasi Google Form</span></div> 
+       <a class="pmb-svc" data-pmb-button="portal_disability" href="https://lld.unpam.ac.id/" target="_blank" rel="noopener"><div class="ic">♿</div><b data-pmb-label>Daftar Disabilitas</b><span>Jalur penyandang disabilitas</span></a>
+        <a class="pmb-svc feat" data-pmb-button="portal_verify" href="https://pmbunpam.my.id/" target="_blank" rel="noopener"><div class="ic">✅</div><b data-pmb-label>Cek Verifikasi</b><span>Hasil verifikasi (khusus G-Form)</span></a>
+        <a class="pmb-svc feat" data-pmb-button="portal_graduation" href="https://rl-pmb.unpam.ac.id/c_front/info_pmb" target="_blank" rel="noopener"><div class="ic">🏆</div><b data-pmb-label>Cek Kelulusan</b><span>Pengumuman kelulusan Maba</span></a>
+        <a class="pmb-svc" data-pmb-button="portal_exam_participants" href="https://pmb.unpam.ac.id/daftar-peserta-ujian" target="_blank" rel="noopener"><div class="ic">🧾</div><b data-pmb-label>Peserta Ujian SPMB</b><span>Cek jadwal &amp; peserta ujian</span></a>
+        <a class="pmb-svc" data-pmb-button="portal_documents" href="https://pmb.unpam.ac.id/unduh-dokumen" target="_blank" rel="noopener"><div class="ic">📂</div><b data-pmb-label>Unduh Dokumen</b><span>Dokumen penting pendaftaran</span></a>
+        <a class="pmb-svc" data-pmb-button="portal_exam_login" href="https://spmb.unpam.ac.id" target="_blank" rel="noopener"><div class="ic">🔐</div><b data-pmb-label>Login Ujian</b><span>Masuk ke sistem ujian PMB</span></a>
+      </div>
+    </div>
+    <!-- G-FORM POPUP (di dalam section) -->
+    <div class="pmb-gform" id="pmbGform">
+      <div class="bx">
+        <h3>Pilih Lokasi Pendaftaran G-Form</h3>
+        <a href="https://forms.gle/faH7ZGLqTvzvjcN39" target="_blank" rel="noopener">📍 G-Form Unpam Tangerang Selatan</a>
+        <a class="g" href="https://forms.gle/2JnFqcrbzKgZh4Y27" target="_blank" rel="noopener">📍 G-Form Unpam Kota Serang</a>
+        <button class="x" onclick="pmbCloseGform()">Tutup</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== SELEKSI PMB (SPMB) ===================== -->
+  <section class="pmb-sec alt" id="pmb-spmb">
+    <div class="pmb-wrap">
+      <div class="pmb-spmb-grid pmb-rv">
+        <div class="pmb-spmb-photo">
+          <img data-pmb-image="spmb" src="https://lppmb.web.id/p/assets/img/kolase2tr.png" alt="Kolase Mahasiswa Universitas Pamulang" loading="lazy">
+        </div>
+        <div class="pmb-spmb-body">
+          <span class="pmb-kick">📘 Tentang SPMB</span>
+          <h2 class="pmb-title" data-pmb-text="spmb_title">Seleksi Penerimaan Mahasiswa Baru</h2>
+          <p>Penerimaan Mahasiswa Baru (PMB) Universitas Pamulang Tahun Akademik 2025/2026 telah dibuka melalui beberapa jalur pendaftaran. Pilih jalur yang paling sesuai dengan kebutuhanmu.</p>
+          <ul class="pmb-spmb-points">
+            <li><span class="ic">💻</span><div><b>Pendaftaran Online</b> melalui Website resmi PMB, Online melalui G-Form, maupun <b>Offline</b> secara langsung di kampus.</div></li>
+            <li><span class="ic">🎯</span><div><b>Jalur Bebas Tes Masuk</b> bagi pendaftar yang memenuhi kriteria: nilai rata-rata ijazah (SMA/SMK/MA) di atas 88, pernah mengikuti SNBP, atau memiliki sertifikat prestasi perlombaan tingkat regional.</div></li>
+          </ul>
+          <a class="pmb-btn navy" data-pmb-button="spmb_exam_participants" href="https://pmb.unpam.ac.id/daftar-peserta-ujian" target="_blank" rel="noopener"><span data-pmb-label>🧾 Cek Peserta Ujian SPMB</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== QUIZ COCOK PRODI ===================== -->
+  <section class="pmb-sec" id="pmb-quiz">
+    <div class="pmb-wrap">
+      <div class="pmb-head pmb-rv">
+        <span class="pmb-kick">🎯 Tes Minat</span>
+          <h2 class="pmb-title" data-pmb-text="quiz_title">Kamu Cocok di Prodi Apa?</h2>
+        <p class="pmb-sub">Jawab 30 pernyataan singkat, lalu sistem merekomendasikan program studi yang paling pas untukmu.</p>
+      </div>
+      <div class="pmb-quiz pmb-rv">
+        <div class="glow"></div>
+        <div class="box">
+          <div class="em">🎓</div>
+          <h3>Kamu cocoknya di prodi apa ya?</h3>
+          <p>Pilih kampus terlebih dahulu sebelum memulai tes (30 soal psikologi singkat).</p>
+          <button class="pmb-qbtn b" onclick="pmbSelectCampus('Tangsel')">Unpam Tangsel</button>
+          <button class="pmb-qbtn g" onclick="pmbSelectCampus('Serang')">Unpam Serang</button>
+          <div class="pmb-qpick" id="pmbQuizPick">
+            <p>Kampus dipilih: <b id="pmbCampusName"></b></p>
+            <button class="pmb-qbtn gold" onclick="pmbStartQuiz()">Mulai Quiz →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pmb-qmodal" id="pmbQuizModal">
+      <div class="pmb-qcard">
+        <div class="pmb-qbar"><i id="pmbQuizBar"></i></div>
+        <p class="cnt" id="pmbQuizCount">Soal 0 dari 30</p>
+        <h4 id="pmbQuizQ"></h4>
+        <div class="pmb-qopts" id="pmbQuizOpts"></div>
+        <button class="pmb-qbtn g" style="margin-top:12px" onclick="pmbNextQ()">Lanjut →</button>
+      </div>
+    </div>
+    <div class="pmb-qmodal" id="pmbQuizResult">
+      <div class="pmb-qcard" style="text-align:center">
+        <div class="em" style="font-size:42px">📊</div>
+        <h4>Hasil Tes Kamu</h4>
+        <p style="color:#5d6b8c;margin:0 0 6px">Prodi yang paling cocok untukmu:</p>
+        <div class="pmb-qres" id="pmbQuizOut"></div>
+        <a class="pmb-qbtn gold" data-pmb-button="quiz_register" style="text-decoration:none;display:inline-block" href="https://rl-pmb.unpam.ac.id/" target="_blank" rel="noopener"><span data-pmb-label>Daftar Online Sekarang</span></a>
+        <br><button class="pmb-qclose" onclick="pmbCloseQuiz()">Tutup</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== JADWAL / KALENDER ===================== -->
+  <section class="pmb-sec alt" id="pmb-jadwal">
+    <div class="pmb-wrap">
+      <div class="pmb-head pmb-rv">
+        <span class="pmb-kick">📅 Jadwal Penting</span>
+          <h2 class="pmb-title" data-pmb-text="schedule_title">Tanggal Penting SPMB 2026</h2>
+        <p class="pmb-sub">Arahkan kursor atau sentuh tanggal berwarna untuk melihat keterangan agendanya.</p>
+      </div>
+      <div class="pmb-rv">
+        <div class="pmb-cal-tabs" id="pmbCalTabs">
+          <button class="pmb-cal-tab on" data-g="all">Semua Gelombang</button>
+          <button class="pmb-cal-tab" data-g="I">Gelombang I</button>
+          <button class="pmb-cal-tab" data-g="II">Gelombang II</button>
+        </div>
+        <div class="pmb-legend">
+          <span class="lg"><i style="background:#3b82f6"></i>Pendaftaran</span>
+          <span class="lg"><i style="background:#6366f1"></i>SPMB Online (Ujian)</span>
+          <span class="lg"><i style="background:#f59e0b"></i>Pengumuman</span>
+          <span class="lg"><i style="background:#10b981"></i>Registrasi</span>
+          <span class="lg"><i style="background:#f43f5e"></i>PKKMB</span>
+          <span class="lg"><i style="background:#06b6d4"></i>Cetak KRS</span>
+        </div>
+        <div class="pmb-months" id="pmbMonths"></div>
+        <div class="pmb-cal-note">
+          <div style="font-size:20px">⚠️</div>
+          <p><b>Catatan:</b> Tidak ada perpanjangan waktu untuk setiap tahapan. Pastikan Anda mengikuti setiap jadwal tepat waktu.</p>
+        </div>
+        <div class="pmb-cal-note">
+          <div style="font-size:20px">📝</div>
+          <p><b>*Catatan:</b> Pendaftaran dan pindah program perkuliahan/Program Studi, paling lambat 4 hari sebelum terselenggaranya SPMB.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div id="pmbPop"></div>
+
+  <!-- ===================== BIAYA ===================== -->
+  <section class="pmb-sec" id="pmb-biaya">
+    <div class="pmb-wrap">
+      <div class="pmb-head pmb-rv">
+        <span class="pmb-kick">💰 Biaya Kuliah</span>
+          <h2 class="pmb-title" data-pmb-text="cost_title">Rincian Biaya Pendidikan</h2>
+        <p class="pmb-sub">Biaya kuliah terjangkau tanpa uang gedung. Pilih jenjang dan lokasi kampus untuk melihat rinciannya.</p>
+      </div>
+      <div class="pmb-bchips pmb-rv">
+        <span class="pmb-bchip">Diskon 50% Formulir Gelombang 1 (Sarjana &amp; Diploma)</span>
+        <span class="pmb-bchip b">✨ 2 Gelombang Pendaftaran</span>
+      </div>
+      <div class="pmb-biaya-tabs pmb-rv" id="pmbBiayaTabs">
+        <button class="pmb-btab on" data-p="ts1">Sarjana (S-1) Tangsel</button>
+        <button class="pmb-btab" data-p="ss1">Sarjana (S-1) Serang</button>
+        <button class="pmb-btab" data-p="ts2">Pascasarjana (S-2)</button>
+      </div>
+      <div class="pmb-rv">
+        <div class="pmb-bpane on" data-p="ts1"><div class="pmb-btable-wrap"><div class="pmb-btable-cap">💰 Sarjana (S-1) – Kampus Tangerang Selatan</div><div class="pmb-bscroll"><table class="pmb-btable"><thead><tr><th>Uraian Biaya</th><th>Reg. A &amp; B</th><th>Reg. C, S &amp; CK</th><th>Keterangan</th></tr></thead><tbody><tr><td><span class="u">Formulir Pendaftaran</span></td><td><span class="pr">Rp 100.000</span></td><td><span class="pr">Rp 100.000</span></td><td class="kt">Gel. 1: Diskon 50%</td></tr><tr><td><span class="u">Jaket Almamater + KTM</span></td><td><span class="pr">Rp 250.000</span></td><td><span class="pr">Rp 250.000</span></td><td class="kt">Setelah lulus SPMB</td></tr><tr><td><span class="u">Registrasi Awal Semester</span></td><td><span class="pr">Rp 250.000</span></td><td><span class="pr">Rp 250.000</span></td><td class="kt">Setiap awal semester</td></tr><tr class="hl"><td><span class="u">Biaya Kuliah (per semester)</span></td><td><span class="pr">Rp 1.500.000</span></td><td><span class="pr">Rp 2.400.000</span></td><td class="kt">A&B: Rp 250rb/angsuran; CS&CK: Rp 400rb/angsuran</td></tr><tr><td><span class="u">Angsuran Praktikum</span><div class="kt">Khusus Fak. Teknik, MIPA, Ilmu Komputer, Ilmu Komunikasi & Desain, serta Pend. Jasmani</div></td><td><span class="pr">Rp 200.000</span></td><td><span class="pr">Rp 300.000</span></td><td class="kt">Dilunasi sebelum UAS</td></tr><tr><td><span class="u">Biaya UTS</span></td><td><span class="pr">Rp 300.000</span></td><td><span class="pr">Rp 400.000</span></td><td class="kt">Dilunasi sebelum UTS</td></tr><tr><td><span class="u">Biaya UAS</span></td><td><span class="pr">Rp 300.000</span></td><td><span class="pr">Rp 400.000</span></td><td class="kt">Dilunasi sebelum UAS</td></tr></tbody></table></div><div class="pmb-breg"><div class="ic">ℹ️</div><div class="tx"><h5>Biaya Registrasi Awal</h5><div class="rows"><span class="a">Reg. A &amp; B: <b>Rp 750.000</b></span><span class="c">Reg. C, S &amp; CK: <b>Rp 900.000</b></span></div><p class="note">*Sudah termasuk KTM, Jaket Almamater, Registrasi Awal Semester, dan Angsuran Kuliah Pertama</p></div></div></div></div>
+        <div class="pmb-bpane" data-p="ss1"><div class="pmb-btable-wrap"><div class="pmb-btable-cap">💰 Sarjana (S-1) – Kampus Serang</div><div class="pmb-bscroll"><table class="pmb-btable"><thead><tr><th>Uraian Biaya</th><th>Reg. A &amp; B</th><th>Reg. C, S &amp; CK</th><th>Keterangan</th></tr></thead><tbody><tr><td><span class="u">Formulir Pendaftaran</span></td><td><span class="pr">Rp 100.000</span></td><td><span class="pr">Rp 100.000</span></td><td class="kt">Digratiskan (Gel. 1)</td></tr><tr><td><span class="u">Jaket Almamater + KTM</span></td><td><span class="pr">Rp 250.000</span></td><td><span class="pr">Rp 250.000</span></td><td class="kt">Setelah lulus SPMB</td></tr><tr><td><span class="u">Registrasi Awal Semester</span></td><td><span class="pr">Rp 250.000</span></td><td><span class="pr">Rp 250.000</span></td><td class="kt">Setiap awal semester</td></tr><tr class="hl"><td><span class="u">Biaya Kuliah (per semester)</span></td><td><span class="pr">Rp 1.200.000</span></td><td><span class="pr">Rp 1.800.000</span></td><td class="kt">A&B: Rp 200rb/angsuran; CS: Rp 300rb/angsuran</td></tr><tr><td><span class="u">Angsuran Praktikum</span><div class="kt">Khusus Fak. Teknik, MIPA & Ilmu Komputer</div></td><td><span class="pr">Rp 100.000</span></td><td><span class="pr">Rp 150.000</span></td><td class="kt">Dilunasi sebelum UAS</td></tr><tr><td><span class="u">Biaya UTS</span></td><td><span class="pr">Rp 200.000</span></td><td><span class="pr">Rp 300.000</span></td><td class="kt">Dilunasi sebelum UTS</td></tr><tr><td><span class="u">Biaya UAS</span></td><td><span class="pr">Rp 200.000</span></td><td><span class="pr">Rp 300.000</span></td><td class="kt">Dilunasi sebelum UAS</td></tr></tbody></table></div><div class="pmb-breg"><div class="ic">ℹ️</div><div class="tx"><h5>Biaya Registrasi Awal</h5><div class="rows"><span class="a">Reg. A &amp; B: <b>Rp 700.000</b></span><span class="c">Reg. CS: <b>Rp 800.000</b></span></div><p class="note">*Sudah termasuk KTM, Jaket Almamater, Registrasi Awal Semester, dan Angsuran Kuliah Pertama</p></div></div></div></div>
+        <div class="pmb-bpane" data-p="ts2"><div class="pmb-btable-wrap"><div class="pmb-btable-cap">💰 Pascasarjana (S-2) – Kampus Tangerang Selatan</div><div class="pmb-bscroll"><table class="pmb-btable"><thead><tr><th>Uraian Biaya</th><th>Reg. A &amp; B</th><th>Reg. C, S &amp; CK</th><th>Keterangan</th></tr></thead><tbody><tr><td><span class="u">Formulir Pendaftaran</span></td><td><span class="pr">Rp 200.000</span></td><td><span class="pr">Rp 200.000</span></td><td class="kt">Berlaku semua gelombang</td></tr><tr><td><span class="u">Jaket Almamater + KTM</span></td><td><span class="pr">Rp 400.000</span></td><td><span class="pr">Rp 400.000</span></td><td class="kt">Setelah lulus SPMB</td></tr><tr><td><span class="u">Matrikulasi</span></td><td><span class="pr">Rp 400.000</span></td><td><span class="pr">Rp 400.000</span></td><td class="kt">Sekali saat registrasi</td></tr><tr><td><span class="u">Registrasi Awal Semester</span></td><td><span class="pr">Rp 250.000</span></td><td><span class="pr">Rp 250.000</span></td><td class="kt">Setiap awal semester</td></tr><tr class="hl"><td><span class="u">Biaya Kuliah (per semester)</span></td><td><span class="pr">Rp 3.600.000</span></td><td><span class="pr">Rp 5.700.000</span></td><td class="kt">A&B: Rp 600rb/angsuran; C: Rp 950rb/angsuran</td></tr><tr><td><span class="u">Biaya UTS</span></td><td><span class="pr">Rp 450.000</span></td><td><span class="pr">Rp 450.000</span></td><td class="kt">Dilunasi sebelum UTS</td></tr><tr><td><span class="u">Biaya UAS</span></td><td><span class="pr">Rp 450.000</span></td><td><span class="pr">Rp 450.000</span></td><td class="kt">Dilunasi sebelum UAS</td></tr></tbody></table></div><div class="pmb-breg"><div class="ic">ℹ️</div><div class="tx"><h5>Biaya Registrasi Awal</h5><div class="rows"><span class="a">Reg. A &amp; B: <b>Rp 1.650.000</b></span><span class="c">Reg. C: <b>Rp 2.000.000</b></span></div><p class="note">*Sudah termasuk KTM, Jaket Almamater, Matrikulasi, Registrasi Awal Semester, dan Angsuran Kuliah Pertama</p></div></div></div></div>
+        <div class="pmb-bnote pmb-rv"><h4>Catatan Penting</h4><ul><li>✅ <b>Bebas Uang Gedung</b> untuk semua program.</li><li>🏷️ Diskon 50% formulir hanya berlaku pada <b>Gelombang 1</b> program Sarjana (S-1) &amp; Diploma.</li><li>📄 Detail biaya pendidikan per semester dapat diakses pada laman <a href="https://lak.unpam.ac.id" target="_blank" rel="noopener">lak.unpam.ac.id</a>.</li><li>🗺️ Reg. A &amp; B dan C, S &amp; CK mengacu pada kelompok Reguler asal calon mahasiswa.</li></ul></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== KAMPUS CAROUSEL ===================== -->
+  <section class="pmb-sec" id="pmb-kampus">
+    <div class="pmb-wrap">
+      <div class="pmb-head pmb-rv">
+        <span class="pmb-kick">🏫 Lokasi Kampus</span>
+          <h2 class="pmb-title" data-pmb-text="campus_title">Empat Kampus Universitas Pamulang</h2>
+        <p class="pmb-sub">Pilih kampus yang paling dekat dan nyaman untuk perjalanan kuliah Anda.</p>
+      </div>
+      <div class="pmb-rv">
+        <div class="pmb-kmp-stage">
+          <div class="pmb-kmp-track" id="pmbKmpTrack">
+            <div class="pmb-kmp-slide"><img src="https://simaba.my.id/assets/img/KAMPUS1.webp" alt="Kampus Pusat" loading="lazy"><div class="cap"><span class="badge">Kampus Pusat</span><h4>Kampus Pusat</h4><p>Jl. Surya Kencana No.1, Pamulang, Tangerang Selatan, Banten 15417</p></div></div>
+            <div class="pmb-kmp-slide"><img src="https://simaba.my.id/assets/img/KAMPUS2.webp" alt="Kampus Viktor" loading="lazy"><div class="cap"><span class="badge">Kampus 2</span><h4>Kampus Viktor</h4><p>Jl. Raya Puspitek, Buaran, Serpong, Tangerang Selatan, Banten 15310</p></div></div>
+            <div class="pmb-kmp-slide"><img src="https://simaba.my.id/assets/img/KAMPUS3.webp" alt="Kampus Witana Harja" loading="lazy"><div class="cap"><span class="badge">Kampus 3</span><h4>Kampus Witana Harja</h4><p>Jl. Witana Harja No.18b, Pamulang, Tangerang Selatan, Banten 15417</p></div></div>
+            <div class="pmb-kmp-slide"><img src="https://simaba.my.id/assets/img/KAMPUS4.webp" alt="Kampus Serang" loading="lazy"><div class="cap"><span class="badge">Kampus 4</span><h4>Kampus Serang</h4><p>Jl. Pantura No.6, Kalodran, Walantaka, Kota Serang, Banten 42183</p></div></div>
+          </div>
+          <button class="pmb-kmp-arrow l" id="pmbKmpPrev" aria-label="Sebelumnya">‹</button>
+          <button class="pmb-kmp-arrow r" id="pmbKmpNext" aria-label="Berikutnya">›</button>
+        </div>
+        <div class="pmb-kmp-dots" id="pmbKmpDots"><i class="on"></i><i></i><i></i><i></i></div>
+        <div class="pmb-kmp-thumbs">
+          <button class="pmb-kmp-thumb" data-i="0"><img src="https://simaba.my.id/assets/img/KAMPUS1.webp" alt="" loading="lazy"><div class="t">Kampus Pusat<span>Pamulang</span></div></button>
+          <button class="pmb-kmp-thumb" data-i="1"><img src="https://simaba.my.id/assets/img/KAMPUS2.webp" alt="" loading="lazy"><div class="t">Kampus Viktor<span>Serpong</span></div></button>
+          <button class="pmb-kmp-thumb" data-i="2"><img src="https://simaba.my.id/assets/img/KAMPUS3.webp" alt="" loading="lazy"><div class="t">Witana Harja<span>Pamulang</span></div></button>
+          <button class="pmb-kmp-thumb" data-i="3"><img src="https://simaba.my.id/assets/img/KAMPUS4.webp" alt="" loading="lazy"><div class="t">Kampus Serang<span>Kota Serang</span></div></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PETA KAMPUS ===================== -->
+  <section class="pmb-sec alt" id="pmb-map">
+    <div class="pmb-wrap">
+      <div class="pmb-head pmb-rv">
+        <span class="pmb-kick">📍 Lokasi</span>
+          <h2 class="pmb-title" data-pmb-text="map_title">Peta Kampus UNPAM</h2>
+        <p class="pmb-sub">Empat kampus Universitas Pamulang tersebar di Tangerang Selatan dan Kota Serang.</p>
+      </div>
+      <div class="pmb-map-wrap pmb-rv"><div id="pmbMap"></div></div>
+      <div class="pmb-map-legend pmb-rv">
+        <span><i></i> 1. Kampus Pusat</span><span><i></i> 2. Kampus Viktor</span><span><i></i> 3. Kampus Witana Harja</span><span><i></i> 4. Kampus Serang</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== HIGHLIGHTS ===================== -->
+  <section class="pmb-sec alt" id="pmb-highlights">
+    <div class="pmb-wrap">
+      <div class="pmb-head pmb-rv">
+        <span class="pmb-kick">📰 Info Terbaru</span>
+          <h2 class="pmb-title" data-pmb-text="highlights_title">Highlights UNPAM</h2>
+        <p class="pmb-sub">Berita, prestasi, dan info penting seputar PMB Universitas Pamulang.</p>
+      </div>
+      <div class="pmb-row pmb-rv">
+        <div class="pmb-intro hl">
+          <div class="ic">📖</div>
+          <h3>Baca Semua Berita &amp; Info</h3>
+          <p>Kumpulan kabar terbaru, tips, dan pengumuman resmi seputar Penerimaan Mahasiswa Baru UNPAM.</p>
+          <a class="pmb-btn" href="https://pmb.unpam.ac.id/berita/" target="_blank" rel="noopener">Berita Selengkapnya →</a>
+        </div>
+        <div class="pmb-scroll-wrap">
+          <div class="pmb-scroll" id="pmbHlScroll"></div>
+          <button class="pmb-arrow l" data-t="pmbHlScroll" data-d="-1">‹</button>
+          <button class="pmb-arrow r" data-t="pmbHlScroll" data-d="1">›</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== TESTIMONI ===================== -->
+  <section class="pmb-sec" id="pmb-testimoni">
+    <div class="pmb-wrap">
+      <div class="pmb-head pmb-rv">
+        <span class="pmb-kick">💬 Kata Mereka</span>
+        <h2 class="pmb-title" data-pmb-text="testimonials_title">Cerita Mahasiswa &amp; Alumni</h2>
+        <p class="pmb-sub">Pengalaman nyata menempuh pendidikan di Universitas Pamulang.</p>
+      </div>
+    </div>
+    <div class="pmb-testi-mask pmb-rv">
+      <div class="pmb-testi-track" id="pmbTestiTrack"></div>
+    </div>
+  </section>
+
+  <!-- ===================== SOCIAL ===================== -->
+  <section class="pmb-sec alt" id="pmb-social">
+    <div class="pmb-wrap">
+      <div class="pmb-head pmb-rv">
+        <span class="pmb-kick">🔗 Terhubung</span>
+        <h2 class="pmb-title" data-pmb-text="social_title">Ikuti Media Sosial Kami</h2>
+        <p class="pmb-sub">Info pendaftaran, tips, dan keseruan kampus. Pantengin akun resmi @pmb.unpam.</p>
+      </div>
+      <div class="pmb-social-grid pmb-rv">
+        <a class="pmb-soc ig" href="https://www.instagram.com/pmb.unpam" target="_blank" rel="noopener"><div class="ic"><img src="https://upload.wikimedia.org/wikipedia/commons/9/95/Instagram_logo_2022.svg" alt="Instagram"></div><b>Instagram</b><span>@pmb.unpam</span><span class="fl">Follow</span></a>
+        <a class="pmb-soc tt" href="https://www.tiktok.com/@pmb.unpam" target="_blank" rel="noopener"><div class="ic"><img src="https://simaba.my.id/assets/img/tiktok.png" alt="TikTok"></div><b>TikTok</b><span>@pmb.unpam</span><span class="fl">Follow</span></a>
+        <a class="pmb-soc yt" href="https://www.youtube.com/@officialpmbunpam" target="_blank" rel="noopener"><div class="ic"><img src="https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png" alt="YouTube"></div><b>YouTube</b><span>@officialpmbunpam</span><span class="fl">Subscribe</span></a>
+        <a class="pmb-soc lc" href="https://tanyapimbi.web.id/" target="_blank" rel="noopener"><div class="ic">💬</div><b>Live Chat</b><span>Tanya PMB</span><span class="fl">Chat</span></a>
+      </div>
+      <div class="pmb-head pmb-rv" style="margin-bottom:28px">
+        <span class="pmb-kick">📸 Postingan Pilihan</span>
+      </div>
+      <div class="pmb-row pmb-rv">
+        <div class="pmb-intro ig">
+          <div class="ic"><img src="https://upload.wikimedia.org/wikipedia/commons/9/95/Instagram_logo_2022.svg" alt="Instagram"></div>
+          <h3>Postingan Pilihan PMB UNPAM</h3>
+          <p>Info paling update seputar pendaftaran langsung dari timeline Instagram kami.</p>
+          <a class="pmb-btn" href="https://www.instagram.com/pmb.unpam" target="_blank" rel="noopener">Follow Instagram →</a>
+        </div>
+        <div class="pmb-scroll-wrap">
+          <div class="pmb-scroll" id="pmbIgScroll"></div>
+          <button class="pmb-arrow l" data-t="pmbIgScroll" data-d="-1">‹</button>
+          <button class="pmb-arrow r" data-t="pmbIgScroll" data-d="1">›</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== TIKTOK ===================== -->
+  <section class="pmb-sec" id="pmb-tiktok">
+    <div class="pmb-wrap">
+      <div class="pmb-head pmb-rv">
+        <span class="pmb-kick">🎬 Video Pilihan</span>
+        <h2 class="pmb-title" data-pmb-text="tiktok_title">TikTok PMB UNPAM</h2>
+        <p class="pmb-sub">Tonton langsung video pilihan @pmb.unpam di sini, klik play tanpa perlu meninggalkan halaman ya!</p>
+      </div>
+      <div class="pmb-tt-grid pmb-rv" id="pmbTtScroll"></div>
+      <div class="pmb-tt-foot pmb-rv"><a class="pmb-btn" href="https://www.tiktok.com/@pmb.unpam" target="_blank" rel="noopener">Lihat Semua di TikTok →</a></div>
+    </div>
+  </section>
+
+  <!-- ===================== CTA ===================== -->
+  <section class="pmb-sec" id="pmb-cta">
+    <div class="pmb-wrap">
+      <div class="pmb-cta pmb-rv">
+        <div class="txt">
+          <h3 data-pmb-text="cta_title">Pendaftaran UNPAM Telah Dibuka</h3>
+          <p data-pmb-text="cta_subtitle">Amankan kursi Anda sekarang juga.</p>
+        </div>
+        <a class="pmb-btn gold" data-pmb-button="cta_register" href="https://spmb.unpam.ac.id" target="_blank" rel="noopener"><span data-pmb-label>Daftar Sekarang →</span></a>
+      </div>
+    </div>
+  </section>
+
+</div>

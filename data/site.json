@@ -1,0 +1,156 @@
+{
+    "site": {
+        "name": "Penerimaan Mahasiswa Baru",
+        "organization": "Universitas Pamulang",
+        "tagline": "Informasi resmi Penerimaan Mahasiswa Baru Universitas Pamulang.",
+        "meta_description": "Penerimaan Mahasiswa Baru Universitas Pamulang. Daftar online, cek jadwal, biaya, dan informasi PMB.",
+        "logo": "",
+        "logo_alt": "Logo Universitas Pamulang"
+    },
+    "theme": {
+        "primary": "#0a1f4d",
+        "secondary": "#13387a",
+        "accent": "#f6b40a",
+        "soft": "#f4f7fd"
+    },
+    "home": {
+        "sections": {
+            "services": true,
+            "stats": true,
+            "welcome": true,
+            "vision": true,
+            "spmb": true,
+            "quiz": true,
+            "schedule": true,
+            "cost": true,
+            "roadmap": true,
+            "testimonials": true,
+            "campus": true,
+            "map": true,
+            "highlights": true,
+            "social": true,
+            "tiktok": true,
+            "cta": true
+        },
+        "buttons": {
+            "hero_register": {
+                "enabled": true,
+                "label": "🚀 Daftar Sekarang",
+                "url": "#pmb-portal"
+            },
+            "hero_programs": {
+                "enabled": true,
+                "label": "Lihat Program Studi →",
+                "url": "https://unpam.web.id/"
+            },
+            "portal_online": {
+                "enabled": true,
+                "label": "Daftar Online",
+                "url": "https://rl-pmb.unpam.ac.id/"
+            },
+            "portal_gform": {
+                "enabled": true,
+                "label": "Daftar G-Form",
+                "url": ""
+            },
+            "portal_disability": {
+                "enabled": true,
+                "label": "Daftar Disabilitas",
+                "url": "https://lld.unpam.ac.id/"
+            },
+            "portal_verify": {
+                "enabled": true,
+                "label": "Cek Verifikasi",
+                "url": "https://pmbunpam.my.id/"
+            },
+            "portal_graduation": {
+                "enabled": true,
+                "label": "Cek Kelulusan",
+                "url": "https://rl-pmb.unpam.ac.id/c_front/info_pmb"
+            },
+            "portal_exam_participants": {
+                "enabled": true,
+                "label": "Peserta Ujian SPMB",
+                "url": "https://pmb.unpam.ac.id/daftar-peserta-ujian"
+            },
+            "portal_documents": {
+                "enabled": true,
+                "label": "Unduh Dokumen",
+                "url": "https://pmb.unpam.ac.id/unduh-dokumen"
+            },
+            "portal_exam_login": {
+                "enabled": true,
+                "label": "Login Ujian",
+                "url": "https://spmb.unpam.ac.id"
+            },
+            "spmb_exam_participants": {
+                "enabled": true,
+                "label": "🧾 Cek Peserta Ujian SPMB",
+                "url": "https://pmb.unpam.ac.id/daftar-peserta-ujian"
+            },
+            "quiz_register": {
+                "enabled": true,
+                "label": "Daftar Online Sekarang",
+                "url": "https://rl-pmb.unpam.ac.id/"
+            },
+            "cta_register": {
+                "enabled": true,
+                "label": "Daftar Sekarang →",
+                "url": "https://spmb.unpam.ac.id"
+            }
+        },
+        "text": {
+            "hero_badge": "🎓 Penerimaan Mahasiswa Baru 2026",
+            "hero_title_main": "Penerimaan",
+            "hero_title_highlight": "Mahasiswa Baru",
+            "hero_title_org": "Universitas Pamulang",
+            "hero_description": "Bergabung bersama ribuan mahasiswa dari Sabang sampai Merauke dan berbagai negara. Kuliah berkualitas, biaya terjangkau, dan jaringan alumni yang luas.",
+            "portal_title": "Semua Kebutuhan PMB dalam Satu Tempat",
+            "portal_subtitle": "Akses cepat ke layanan pendaftaran, verifikasi, dan informasi resmi PMB Universitas Pamulang.",
+            "spmb_title": "Seleksi Penerimaan Mahasiswa Baru",
+            "quiz_title": "Kamu Cocok di Prodi Apa?",
+            "schedule_title": "Tanggal Penting SPMB 2026",
+            "cost_title": "Rincian Biaya Pendidikan",
+            "campus_title": "Empat Kampus Universitas Pamulang",
+            "map_title": "Peta Kampus UNPAM",
+            "highlights_title": "Highlights UNPAM",
+            "testimonials_title": "Cerita Mahasiswa & Alumni",
+            "social_title": "Ikuti Media Sosial Kami",
+            "tiktok_title": "TikTok PMB UNPAM",
+            "cta_title": "Pendaftaran UNPAM Telah Dibuka",
+            "cta_subtitle": "Amankan kursi Anda sekarang juga."
+        }
+    },
+    "images": {
+        "hero_1": "",
+        "hero_2": "",
+        "hero_3": "",
+        "hero_4": "",
+        "hero_person": "",
+        "spmb": "uploads/img_20261006194451_b87e51.png",
+        "sambutan": ""
+    },
+    "pages": {
+        "index": true,
+        "front": true,
+        "almet": true,
+        "biaya": true,
+        "download": true,
+        "info": true,
+        "jadwal": true,
+        "lokasi": true,
+        "peserta": true,
+        "pkkmb": true,
+        "profil": true,
+        "sambutan": true,
+        "simaba": true,
+        "syarat": true
+    },
+    "participants": {
+        "mode": "manual",
+        "show": false,
+        "ujian_selesai": "2026-08-11 23:59",
+        "gelombang": "Gelombang 4"
+    },
+    "page_content": []
+}

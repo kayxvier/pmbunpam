@@ -1,0 +1,42 @@
+# Secrets and machine-specific configuration
+.env
+.env.*
+!.env.example
+/config.local.php
+*.local.*
+credentials*
+*.pem
+*.key
+*.p12
+*.pfx
+/.aws/
+/.codex/
+/.agents/
+
+# Private participant data and live sessions
+/peserta.json
+/data/sessions/
+sess_*
+
+# Dependencies, caches, logs, backups, and verification output
+node_modules/
+vendor/
+*.log
+cache/
+.cache/
+tmp/
+temp/
+backups/
+backup/
+*.bak
+*.backup
+*.old
+*.orig
+*.swp
+*~
+/.verification/
+.ftp-deploy-sync-state.json
+/.idea/
+/.vscode/
+.DS_Store
+Thumbs.db

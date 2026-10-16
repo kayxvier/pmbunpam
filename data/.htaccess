@@ -1,0 +1,5 @@
+# PHP can still read these files through the filesystem.
+<FilesMatch "^sess_">
+    Require all denied
+</FilesMatch>
+Options -Indexes

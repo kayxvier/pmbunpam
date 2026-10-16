@@ -1,0 +1,4 @@
+# Private configuration and participant records must not be downloaded directly.
+<FilesMatch "^(config\.local\.php|config\.example\.php|peserta\.json)$">
+    Require all denied
+</FilesMatch>

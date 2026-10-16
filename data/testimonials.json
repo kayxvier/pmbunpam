@@ -1,0 +1,66 @@
+[
+    {
+        "id": "ts1",
+        "name": "Usmonali Khasanov",
+        "prodi": "Sastra Inggris S1",
+        "text": "Balancing work and college is so much easier thanks to the flexible class schedule. The tuition is genuinely affordable, and the lecturers are incredibly supportive throughout the journey.",
+        "c": "#0a1f4d",
+        "photo": "uploads/img_20260722095418_abdd22.jpg"
+    },
+    {
+        "id": "ts2",
+        "name": "Romana Mutiara Harefa",
+        "prodi": "Akuntansi Perpajakan D4",
+        "text": "Daftarnya oke, materi update sama dunia industri. Proses pendaftarannya juga cepat dan jelas step by step nya.",
+        "c": "#7c3aed",
+        "photo": "uploads/img_20260722101753_d07b1f.jpg"
+    },
+    {
+        "id": "ts3",
+        "name": "Belek Bakirov",
+        "prodi": "Matematika S1",
+        "text": "Everything was well-organized, from the online registration to the SPMB entrance exam. I'm truly proud to be part of the UNPAM family.",
+        "c": "#06b6d4",
+        "photo": "uploads/img_20260722101842_20620c.jpg"
+    },
+    {
+        "id": "ts4",
+        "name": "Olivia Claresta P.J",
+        "prodi": "Sastra Inggris S1",
+        "text": "Lokasi kampus strategis dan gampang dijangkau. Lingkungan belajarnya asik, teman temannya juga solid.",
+        "c": "#f59e0b",
+        "photo": "uploads/img_20260722101944_5dd949.jpg"
+    },
+    {
+        "id": "ts5",
+        "name": "Zahra Nur Fitriani",
+        "prodi": "Ilmu Komunikasi S1",
+        "text": "Pendaftaran mudah dipahami dan admin PMB responsif banget. Sekarang aku resmi jadi mahasiswa UNPAM.",
+        "c": "#ec4899",
+        "photo": "uploads/img_20260722104427_474cba.jpg"
+    },
+    {
+        "id": "ts6",
+        "name": "Daffa Dzaki Nugroho",
+        "prodi": "Ilmu Komunikasi S1",
+        "text": "Kampus dekat rumah, jadi hemat waktu dan biaya. Fasilitasnya lengkap dan nyaman buat belajar.",
+        "c": "#10b981",
+        "photo": "uploads/img_20260722105156_15d2fe.jpg"
+    },
+    {
+        "id": "84f0ddfaf5",
+        "name": "Ahmad Naufal Zaid",
+        "prodi": "Ilmu Komunikasi S1",
+        "text": "Yang paling saya suka dari UNPAM adalah kesempatan kuliah dengan biaya terjangkau tanpa mengurangi kualitas pendidikan. Sangat membantu untuk mahasiswa yang ingin terus berkembang!",
+        "c": "#0a1f4d",
+        "photo": "uploads/img_20260722105638_fdd491.jpg"
+    },
+    {
+        "id": "835b21d4a4",
+        "name": "Callista Salsabila",
+        "prodi": "Akuntansi S1",
+        "text": "Aku senang jadi bagian dari UNPAM. Kuliahnya nyaman, fasilitasnya terus berkembang, dan yang paling penting, aku bisa tetap mengejar pendidikan tanpa membebani orang tua.",
+        "c": "#0a1f4d",
+        "photo": "uploads/img_20260724144741_6b35a8.jpg"
+    }
+]
