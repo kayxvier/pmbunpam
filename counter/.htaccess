@@ -1,6 +1,8 @@
 Options -Indexes
 RewriteEngine On
 RewriteRule ^(?:cache|storage|vendor)(?:/|$) - [F,L]
+RewriteRule \.(?:db(?:-.*)?|sqlite(?:3)?(?:-.*)?|mmdb|json|phar|lock)$ - [F,L,NC]
+RewriteRule ^config(?:\.example)?\.php$ - [F,L,NC]
 <FilesMatch "(?i)(\.(db(?:-.*)?|sqlite(?:3)?(?:-.*)?|mmdb|json|phar|lock)$|^counter-|^(config(?:\.example)?|bootstrap|countries)\.php$)">
     Require all denied
 </FilesMatch>
