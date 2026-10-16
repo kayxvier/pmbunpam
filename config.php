@@ -3,7 +3,7 @@
    Konfigurasi PMB UNPAM front.php + admin.php
    ===================================================================== */
 
-define('PMB_VER', '3.5');
+define('PMB_VER', '3.6');
 define('PMB_DATA_DIR',   __DIR__ . '/data');
 define('PMB_UPLOAD_DIR', __DIR__ . '/uploads');
 define('PMB_UPLOAD_URL', 'uploads');

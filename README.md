@@ -103,3 +103,38 @@ alas putih agar gambar Flag Counter menyatu. Peta tetap menjadi fokus dengan
 rasio kolom 3:1; pada ≤768px counter ditempatkan di bawahnya. Tidak ada animasi
 atau statistik buatan yang ditambahkan. ENERGY 2 / RHYTHM 2 / MOTION 1 untuk
 komponen baru; animasi dan konten section lain dipertahankan sesuai lingkup tugas.
+
+## Hasil verifikasi
+
+| Lebar viewport | Hasil section sebaran |
+| --- | --- |
+| 1440px | Dua kolom 831px : 277px, tinggi panel sama 342px |
+| 1024px | Dua kolom sekitar 653px : 218px, tinggi panel sama 342px |
+| 390px | Satu kolom sekitar 329px, peta 232px, counter di bawah |
+
+Pengujian browser juga mencakup batas 768/769px dan resize tanpa reload:
+32 area provinsi tetap dirender, legenda berada di dalam peta, tidak ada overflow
+horizontal, gambar widget termuat, dan link info mengembalikan HTTP 200.
+Link dapat difokuskan dengan keyboard dan menampilkan outline. Pemeriksaan PHP
+dan JavaScript lulus. Permintaan favicon otomatis yang sebelumnya 404 pada
+`front.php` dihindari dengan favicon kosong eksplisit.
+Setelah perbaikan tersebut, console tidak berisi error dan tidak ada respons
+HTTP gagal dalam pengujian halaman. Pembatalan request tile saat resize/navigasi
+merupakan pembatalan browser. Seluruh 16 endpoint halaman/API PHP publik/admin
+yang diperiksa merespons HTTP 200 tanpa PHP warning/fatal error.
+
+Pemeriksaan desain untuk komponen baru:
+
+- Hard Gate PASS: lima viewport tanpa overflow, link berfungsi melalui Enter,
+  fokus terlihat, dan tidak ada data/angka buatan baru.
+- Purpose Gate PASS: warna, font, gradasi dan radius berasal dari komponen peta;
+  alas putih menyatukan gambar widget, tanpa dekorasi atau animasi tambahan.
+- Liveliness PASS: ENERGY 2 / RHYTHM 2 / MOTION 1; peta tetap fokus utama,
+  counter pendukung, spacing 18px/14px memisahkan kedua fungsi.
+- Craftsmanship PASS: gambar termuat, semua 32 area peta tetap terlihat saat
+  resize, legenda tidak tertutup, dan komponen memakai identitas PMB yang ada.
+
+DNS lokal komputer pengujian gagal me-resolve host Flag Counter. Pengujian
+widget berhasil memakai alamat DNS publik pada browser uji saja, dengan hostname
+dan HTTPS yang sama; URL widget dalam aplikasi tidak diubah. Jika widget tidak
+tampil pada jaringan tertentu, periksa DNS atau pemblokir konten jaringan itu.

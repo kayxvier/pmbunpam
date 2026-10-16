@@ -514,6 +514,12 @@
         }
       }).addTo(map);
       try{ map.fitBounds(layer.getBounds(),{padding:[2,2]}); }catch(e){}
+      if(window.ResizeObserver){
+        new ResizeObserver(function(){
+          map.invalidateSize({pan:false});
+          map.fitBounds(layer.getBounds(),{padding:[2,2],animate:false});
+        }).observe(el);
+      }
     }
     function init(){
       if(!window.L){ fallback(); return; }

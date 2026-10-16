@@ -24,6 +24,7 @@ if ($body === false) { $body = '<p style="padding:40px;text-align:center">assets
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:,">
 <title><?php echo pmb_esc($PMB_SITE['site']['name'] . ' - ' . $PMB_SITE['site']['organization']); ?></title>
 <meta name="description" content="<?php echo pmb_esc($PMB_SITE['site']['meta_description']); ?>">
 <link rel="preconnect" href="https://fonts.googleapis.com">

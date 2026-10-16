@@ -398,6 +398,17 @@ html,body{margin:0;background:#ffffff;}
 #pmb-app .pmb-sebaran-badges .bdg .ic{font-size:22px;}
 #pmb-app .pmb-sebaran-badges .bdg b{display:block;font-size:20px;font-weight:800;line-height:1;}
 #pmb-app .pmb-sebaran-badges .bdg span{font-size:12px;opacity:.92;}
+#pmb-app .pmb-sebaran-grid{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,1fr);gap:18px;align-items:stretch;}
+#pmb-app .pmb-sebaran-grid>*{min-width:0;}
+#pmb-app .pmb-visitors{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:20px;border-radius:16px;background:linear-gradient(180deg,#f4f8ff,#eaf1fb);border:1px solid var(--line);}
+#pmb-app .pmb-visitors h4{margin:0;text-align:center;font-size:14px;font-weight:700;color:var(--navy);}
+#pmb-app .pmb-visitors-counter{display:flex;align-items:center;justify-content:center;max-width:100%;min-height:44px;padding:12px;background:#fff;border:1px solid var(--line);border-radius:var(--r-sm);}
+#pmb-app .pmb-visitors-counter img{max-width:100%;height:auto;}
+#pmb-app .pmb-visitors-counter:focus-visible{outline:3px solid var(--navy);outline-offset:4px;}
+@media(max-width:768px){
+#pmb-app .pmb-sebaran-grid{grid-template-columns:minmax(0,1fr);gap:14px;}
+#pmb-app .pmb-visitors{padding:18px 14px;gap:12px;}
+}
 #pmb-app .pmb-idmap-wrap{position:relative;border-radius:16px;overflow:hidden;background:linear-gradient(180deg,#f4f8ff,#eaf1fb);border:1px solid var(--line);}
 #pmb-app #pmbSebaranMap{height:340px;width:100%;background:transparent;}
 #pmb-app #pmbSebaranMap .leaflet-tooltip{background:rgba(7,20,47,.92);border:none;color:#fff;font-weight:700;box-shadow:0 6px 16px rgba(0,0,0,.3);border-radius:8px;padding:5px 9px;}
