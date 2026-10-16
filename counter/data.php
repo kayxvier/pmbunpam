@@ -5,6 +5,7 @@ header('Cache-Control: no-store');
 header('X-Content-Type-Options: nosniff');
 try { $data = pmb_counter_data(pmb_counter_config()); }
 catch (Throwable $error) {
-    $data = array('available' => false, 'scope' => 'Asia', 'countries' => array(), 'total' => 0, 'pageviews' => 0);
+    $data = array('available' => false, 'scope' => 'Asia', 'countries' => array(), 'total' => 0, 'pageviews' => 0,
+        'other' => array('countries' => array(), 'total' => 0, 'pageviews' => 0));
 }
 echo json_encode($data, JSON_UNESCAPED_UNICODE);

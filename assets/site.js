@@ -215,38 +215,63 @@
   var base = new URL('../counter/', script.src);
   function render(data) {
     var panel = document.getElementById('pmbVisitorsData');
-    if (!panel || !data || !data.available || !Array.isArray(data.countries) || !data.countries.length) return;
+    if (!panel || !data || !data.available || !Array.isArray(data.countries)) return;
     var content = panel.querySelector('.pmb-counter-content');
-    var list = document.createElement('ul');
-    list.className = 'pmb-counter-list';
     var format = new Intl.NumberFormat('id-ID');
-    data.countries.slice(0, 10).forEach(function (country) {
-      if (!/^[A-Z]{2}$/.test(country.code) || !Number.isSafeInteger(country.n) || country.n <= 0) return;
-      var item = document.createElement('li');
-      var flag = document.createElement('img');
-      flag.src = 'https://flagcdn.com/24x18/' + country.code.toLowerCase() + '.png';
-      flag.alt = country.name;
-      flag.width = 24;
-      flag.height = 18;
-      flag.loading = 'lazy';
-      // Dimensi tetap dipertahankan jika CDN gambar tidak tersedia.
-      flag.addEventListener('error', function () { this.style.visibility = 'hidden'; }, { once: true });
-      var number = document.createElement('span');
-      number.textContent = format.format(country.n);
-      item.title = country.name + ': ' + number.textContent;
-      item.appendChild(flag);
-      item.appendChild(number);
-      list.appendChild(item);
-    });
-    if (!list.children.length) return;
-    var totals = document.createElement('p');
-    totals.className = 'pmb-counter-totals';
-    [['Total pengunjung', data.total], ['Pageviews', data.pageviews]].forEach(function (entry) {
-      var line = document.createElement('span');
-      line.textContent = entry[0] + ': ' + format.format(entry[1]);
-      totals.appendChild(line);
-    });
-    content.replaceChildren(list, totals);
+    var countryNames = typeof Intl.DisplayNames === 'function' ? new Intl.DisplayNames(['id'], { type: 'region' }) : null;
+    function appendGroup(target, countries, total, pageviews) {
+      var list = document.createElement('ul');
+      list.className = 'pmb-counter-list';
+      countries.forEach(function (country) {
+        if (!/^[A-Z]{2}$/.test(country.code) || !Number.isSafeInteger(country.n) || country.n < 0) return;
+        var name = country.name;
+        if ((!name || name === country.code) && countryNames) name = countryNames.of(country.code);
+        name = name || country.code;
+        var item = document.createElement('li');
+        var flag = document.createElement('img');
+        flag.src = 'https://flagcdn.com/24x18/' + country.code.toLowerCase() + '.png';
+        flag.alt = name;
+        flag.width = 24;
+        flag.height = 18;
+        flag.loading = 'lazy';
+        flag.addEventListener('error', function () { this.style.visibility = 'hidden'; }, { once: true });
+        var number = document.createElement('span');
+        number.textContent = format.format(country.n);
+        item.title = name + ': ' + number.textContent;
+        item.appendChild(flag);
+        item.appendChild(number);
+        list.appendChild(item);
+      });
+      if (!list.children.length) {
+        var empty = document.createElement('p');
+        empty.className = 'pmb-counter-empty';
+        empty.textContent = 'Data pengunjung belum tersedia';
+        target.appendChild(empty);
+        return;
+      }
+      var totals = document.createElement('p');
+      totals.className = 'pmb-counter-totals';
+      [['Total pengunjung', total], ['Pageviews', pageviews]].forEach(function (entry) {
+        var line = document.createElement('span');
+        line.textContent = entry[0] + ': ' + format.format(entry[1]);
+        totals.appendChild(line);
+      });
+      target.appendChild(list);
+      target.appendChild(totals);
+    }
+    var fragment = document.createDocumentFragment();
+    appendGroup(fragment, data.countries.slice(0, 10), data.total, data.pageviews);
+    var other = document.createElement('section');
+    other.className = 'pmb-counter-other';
+    other.setAttribute('aria-label', 'Pengunjung dari Benua Lain');
+    var title = document.createElement('div');
+    title.className = 'pmb-counter-label';
+    title.textContent = 'Pengunjung dari Benua Lain';
+    other.appendChild(title);
+    var otherData = data.other || {};
+    appendGroup(other, Array.isArray(otherData.countries) ? otherData.countries : [], otherData.total, otherData.pageviews);
+    fragment.appendChild(other);
+    content.replaceChildren(fragment);
   }
   function start() {
     // Satu POST untuk setiap navigasi halaman publik yang memuat site.js.

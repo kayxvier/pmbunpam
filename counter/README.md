@@ -9,6 +9,20 @@ pageview, tetapi hash IP yang sama hanya menghasilkan satu visitor unik selamany
 
 ## Pengaturan manual di cPanel
 
+Lokasi yang dipakai pada hosting ini berbeda antara kode publik dan data privat:
+
+| Isi | Path filesystem server |
+| --- | --- |
+| Endpoint dan konfigurasi PHP | `/home/pmbs2545/public_html/simaba.my.id/counter/` |
+| Konfigurasi asli | `/home/pmbs2545/public_html/simaba.my.id/counter/config.php` |
+| Database privat | `/home/pmbs2545/pmb-counter/counter.db` |
+| Cache privat | `/home/pmbs2545/pmb-counter/cache/` |
+
+Database dan cache tidak berada satu folder dengan config.php. Folder privat
+`/home/pmbs2545/pmb-counter/` tidak memiliki URL website. Path `/pmb-counter/`
+yang terlihat di File Manager biasanya relatif terhadap home akun; jangan
+mengartikannya sebagai direktori `/pmb-counter/` pada root filesystem server.
+
 1. Pada pemilih versi/ekstensi PHP, aktifkan **PDO** dan **pdo_sqlite**. Gunakan
    PHP yang didukung hosting, minimal 7.4 untuk kode counter ini.
 2. Melalui File Manager, buat folder `/home/pmbs2545/pmb-counter/` dan subfolder
@@ -41,21 +55,33 @@ pageview, tetapi hash IP yang sama hanya menghasilkan satu visitor unik selamany
    paling lambat lima menit karena cache. Jika semua kunjungan bernegara `XX`,
    panel Asia tetap kosong. Data kosong atau konfigurasi gagal memberi fallback
    “Data pengunjung belum tersedia”, bukan angka buatan atau halaman error.
-8. Cek URL `/counter/counter.db`, `/counter/counter.db-wal`,
-   `/counter/config.php`, dan `/counter/cache/asia.json`: semuanya harus ditolak
-   (403), termasuk ketika konfigurasi menggunakan path privat di luar web root.
-   Jika server mengabaikan `.htaccess`, simpan data di luar web root dan perbaiki
-   aturan server sebelum menggunakan penyimpanan di dalam folder publik.
+8. Untuk susunan privat di atas, cek lokasi database/cache melalui File Manager;
+   tidak ada URL untuk membuka file aslinya. URL `/counter/counter.db`,
+   `/counter/counter.db-wal`, dan `/counter/cache/asia.json` hanya dipakai untuk
+   menguji aturan blokir folder publik, bukan menunjukkan lokasi data asli.
+   Aturan project mengembalikan 403 pada URL tersebut meskipun filenya tidak ada.
+   URL `/counter/config.php` juga harus 403 karena config memang berada dalam
+   folder publik. Jangan memindahkan database/cache privat ke folder publik
+   untuk melakukan pengujian. Jika server mengabaikan `.htaccess`, pertahankan
+   data di luar web root dan perbaiki perlindungan config pada server.
 
 ## Seed AWStats sekali pakai
 
 `seed.php` sengaja **tidak di-upload oleh workflow**. Ini mencegah file muncul
 lagi pada deploy berikutnya setelah dihapus.
 
+File sumber tersedia di `counter/seed.php` dalam repository dan project lokal.
+Untuk menjalankannya melalui browser, upload sementara ke
+`/home/pmbs2545/public_html/simaba.my.id/counter/seed.php`, lalu buka
+`https://simaba.my.id/counter/seed.php`. File tersebut membaca config publik,
+tetapi menulis ke database privat sesuai `db_path`; jangan memindahkan database
+atau cache ke folder seed.
+
 1. Buka cPanel → **Metrics → AWStats → Countries** untuk periode historis yang
    selesai sebelum pencatatan live dimulai. Catat periode dan metrik yang dipakai.
 2. Isi `$seedVisitors` dengan angka pengunjung per negara yang memang tersedia
-   dari sumber tersebut. Semua nilai bawaan 0 diberi komentar **ISI DARI AWSTATS**.
+   dari sumber tersebut. File seed kini berisi angka visitor/Pages yang diberikan
+   pengguna untuk ID, MY, SG, PH, US, IN, CA, PL, RO, dan AU; nilai Pages AU tetap 0.
    Jangan memakai **Pages** atau **Hits** sebagai angka visitor unik. Jika laporan
    Countries hanya menyediakan Pages/Hits, biarkan angka visitor 0 sampai ada
    sumber visitor per negara yang sah. Isi `$seedPageviews` dari **Pages** jika ada,
@@ -83,17 +109,24 @@ ukuran orang unik lintas periode yang dapat diverifikasi melalui IP historis.
   pengaturan log hosting terpisah dari penyimpanan aplikasi ini.
 - Bot dengan UA mengandung bot, crawl, spider, slurp, curl, wget, atau headless
   dan request HEAD tidak dicatat. Pengguna yang memblokir JavaScript tidak dihitung.
-- Panel bertajuk **Pengunjung Website** memakai label **Pengunjung dari Asia**.
+- Panel bertajuk **Pengunjung Website** memakai label **Pengunjung dari Asia**,
+  diikuti **Pengunjung dari Benua Lain** di bawahnya.
   Allowlist eksplisit berada di `countries.php`, termasuk ID, MY, SG, TH, PH, VN,
   JP, KR, IN, CN, BN, TL, dan negara/wilayah Asia lain yang tercantum di sana.
-  Negara non-Asia dan XX tidak ditampilkan maupun masuk total panel.
+  Semua negara non-Asia yang memiliki data ditampilkan pada kelompok kedua,
+  tanpa batas 10 negara. Kode XX belum menunjukkan negara/benua sehingga
+  tidak masuk kedua kelompok.
 - Top 10 diurutkan berdasarkan jumlah visitor gabungan menurun; nilai sama
   memakai urutan kode negara. **Total pengunjung** meliputi semua negara Asia,
-  termasuk yang tidak masuk top 10. **Pageviews** juga terbatas pada Asia.
+  termasuk yang tidak masuk top 10. **Pageviews** kelompok Asia juga terbatas pada
+  Asia. Total dan pageviews kelompok benua lain dihitung terpisah dari Asia;
+  daftar non-Asia juga diurutkan menurun, lalu kode negara saat nilainya sama.
   Negara visitor unik mengikuti lokasi saat kunjungan pertama; pageview mengikuti
   negara request masing-masing.
 - Cache lima menit memakai lock dan penggantian file, sedangkan pembaruan SQLite
   memakai transaksi sehingga request bersamaan tidak kehilangan hitungan.
+  Cache lama yang hanya berisi Asia otomatis dibangun ulang saat versi ini
+  di-deploy. Perubahan ini tidak memerlukan seed ulang atau penggantian database.
 - Backup database dan salt secara privat, bersama-sama. `.gitignore` dan exclude
   FTP melindungi konfigurasi, database beserta sidecar, cache, storage, vendor,
   dan seluruh `.mmdb`. `dangerous-clean-slate` tetap nonaktif.

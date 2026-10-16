@@ -88,21 +88,34 @@ function pmb_counter_snapshot(PDO $db) {
         UNION ALL SELECT country, n, pageviews AS views FROM seed
     ) GROUP BY country')->fetchAll();
     $countries = array();
+    $other = array('countries' => array(), 'total' => 0, 'pageviews' => 0);
     $total = 0;
     $views = 0;
     foreach ($rows as $row) {
         $code = $row['country'];
-        if (!isset($names[$code])) continue;
+        if (!isset($names[$code])) {
+            if ($code !== 'XX' && preg_match('/^[A-Z]{2}$/D', $code)) {
+                $n = (int)$row['visitors'];
+                $other['total'] += $n;
+                $other['pageviews'] += (int)$row['pageviews'];
+                if ($n > 0 || (int)$row['pageviews'] > 0) {
+                    $other['countries'][] = array('code' => $code, 'name' => $code, 'n' => $n);
+                }
+            }
+            continue;
+        }
         $n = (int)$row['visitors'];
         $total += $n;
         $views += (int)$row['pageviews'];
         if ($n > 0) $countries[] = array('code' => $code, 'name' => $names[$code], 'n' => $n);
     }
-    usort($countries, function ($a, $b) {
+    $sort = function ($a, $b) {
         return ($b['n'] <=> $a['n']) ?: strcmp($a['code'], $b['code']);
-    });
-    return array('available' => $total > 0, 'scope' => 'Asia', 'countries' => array_slice($countries, 0, 10),
-        'total' => $total, 'pageviews' => $views);
+    };
+    usort($countries, $sort);
+    usort($other['countries'], $sort);
+    return array('available' => $total > 0 || count($other['countries']) > 0, 'scope' => 'Asia',
+        'countries' => array_slice($countries, 0, 10), 'total' => $total, 'pageviews' => $views, 'other' => $other);
 }
 
 function pmb_counter_data(array $config) {
@@ -116,7 +129,7 @@ function pmb_counter_data(array $config) {
     if (!$lock || !flock($lock, LOCK_EX)) throw new RuntimeException('Cache terkunci.');
     try {
         $cached = is_file($file) ? json_decode((string)@file_get_contents($file), true) : null;
-        if (is_array($cached) && isset($cached['expires'], $cached['data']) && $cached['expires'] > time()) {
+        if (is_array($cached) && isset($cached['expires'], $cached['data']['other']) && $cached['expires'] > time()) {
             return $cached['data'];
         }
         $data = pmb_counter_snapshot(pmb_counter_db($config));

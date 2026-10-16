@@ -4,13 +4,17 @@ header('Cache-Control: no-store');
 header('Referrer-Policy: no-referrer');
 header('Content-Type: text/html; charset=utf-8');
 
-// ISI DARI AWSTATS. Semua angka nol berikut adalah placeholder, BUKAN data asli.
+// Data visitor dan Pages sesuai angka yang diberikan pengguna.
 // Gunakan periode historis sebelum counter live mulai agar periode tidak tumpang tindih.
-$seedVisitors = array('ID' => 0, 'MY' => 0, 'SG' => 0, 'TH' => 0, 'PH' => 0,
-    'VN' => 0, 'JP' => 0, 'KR' => 0, 'IN' => 0, 'CN' => 0, 'BN' => 0, 'TL' => 0);
-// ISI DARI AWSTATS: Pages per negara, bukan Hits. Biarkan 0 jika tidak ada data asli.
-$seedPageviews = array('ID' => 0, 'MY' => 0, 'SG' => 0, 'TH' => 0, 'PH' => 0,
-    'VN' => 0, 'JP' => 0, 'KR' => 0, 'IN' => 0, 'CN' => 0, 'BN' => 0, 'TL' => 0);
+$seedVisitors = array(
+    'ID' => 3259, 'MY' => 1124, 'SG' => 364, 'PH' => 250, 'US' => 81,
+    'IN' => 16, 'CA' => 1, 'PL' => 1, 'RO' => 1, 'AU' => 3,
+);
+// Pages per negara, bukan Hits. Nilai nol AU dipertahankan sesuai data pengguna.
+$seedPageviews = array(
+    'ID' => 3259, 'MY' => 1095, 'SG' => 355, 'PH' => 250, 'US' => 72,
+    'IN' => 4, 'CA' => 1, 'PL' => 1, 'RO' => 1, 'AU' => 0,
+);
 
 try {
     $config = pmb_counter_config();

@@ -52,7 +52,9 @@ try {
     check_counter(pmb_counter_country(array('HTTP_CF_IPCOUNTRY' => '<script>'), $config, '192.0.2.1') === 'XX', 'invalid country rejected');
     pmb_counter_track(counter_request('192.0.2.55', 'US'), $config);
     pmb_counter_track(counter_request('192.0.2.56', 'XX'), $config);
-    check_counter(!in_array('US', array_column(pmb_counter_snapshot($db)['countries'], 'code'), true), 'non-Asia and XX excluded from display');
+    $split = pmb_counter_snapshot($db);
+    check_counter(!in_array('US', array_column($split['countries'], 'code'), true)
+        && array_column($split['other']['countries'], 'code') === array('US'), 'non-Asia separated and XX excluded');
     $columns = array_column($db->query('PRAGMA table_info(visitors)')->fetchAll(), 'name');
     $hashes = $db->query('SELECT ip_hash FROM visitors')->fetchAll(PDO::FETCH_COLUMN);
     check_counter($columns === array('ip_hash', 'country') && count(array_filter($hashes, function ($h) {
@@ -68,6 +70,10 @@ try {
     check_counter($cache['expires'] - time() >= 298 && $cache['expires'] - time() <= 300, 'cache expires after five minutes');
     $cache['expires'] = time() - 1; file_put_contents($cacheFile, json_encode($cache));
     check_counter(pmb_counter_data($config)['total'] === $cached['total'] + 1, 'expired cache rebuilt');
+    $legacy = json_decode(file_get_contents($cacheFile), true);
+    unset($legacy['data']['other']);
+    file_put_contents($cacheFile, json_encode($legacy));
+    check_counter(isset(pmb_counter_data($config)['other']), 'old Asia-only cache automatically rebuilt');
     $rejected = false;
     try { pmb_counter_seed($db, array('ID' => 0), array('ID' => 0)); }
     catch (RuntimeException $e) { $rejected = true; }
@@ -77,6 +83,8 @@ try {
     $after = pmb_counter_snapshot($db);
     check_counter($after['total'] === $before['total'] + 10 && $after['pageviews'] === $before['pageviews'] + 16,
         'test seed plus live totals limited to Asia');
+    check_counter($after['other']['total'] === $before['other']['total'] + 500
+        && $after['other']['pageviews'] === $before['other']['pageviews'] + 800, 'other continents combine seed and live separately');
     $rejected = false;
     try { pmb_counter_seed($db, array('ID' => 7), array()); } catch (RuntimeException $e) { $rejected = true; }
     check_counter($rejected && pmb_counter_snapshot($db) === $after, 'repeat seed rejected without modifying totals');
@@ -84,10 +92,21 @@ try {
     $rankDb = pmb_counter_db($rankConfig);
     $fixture = array(); $i = 1;
     foreach (array_keys(require dirname(__DIR__) . '/counter/countries.php') as $code) $fixture[$code] = $i++;
+    $asiaTotal = array_sum($fixture);
+    $i = 1;
+    foreach (array('US','CA','PL','RO','AU','GB','FR','DE','ES','IT','NL','BR') as $code) $fixture[$code] = $i++;
+    $fixture['XX'] = 999;
     pmb_counter_seed($rankDb, $fixture, array());
     $rank = pmb_counter_snapshot($rankDb);
     $counts = array_column($rank['countries'], 'n'); $sorted = $counts; rsort($sorted);
-    check_counter(count($counts) === 10 && $counts === $sorted && $rank['total'] === array_sum($fixture), 'top ten sorted by data, totals include all Asia');
+    check_counter(count($counts) === 10 && $counts === $sorted && $rank['total'] === $asiaTotal, 'top ten sorted by data, totals include all Asia');
+    check_counter(count($rank['other']['countries']) === 12 && $rank['other']['total'] === 78
+        && array_column($rank['other']['countries'], 'n') === range(12, 1), 'all non-Asia countries displayed without top-ten limit');
+    $onlyConfig = $config; $onlyConfig['db_path'] = $dir . '/other-only.db';
+    pmb_counter_track(counter_request('192.0.2.88', 'RO'), $onlyConfig);
+    $only = pmb_counter_snapshot(pmb_counter_db($onlyConfig));
+    check_counter($only['available'] && $only['countries'] === array() && $only['other']['total'] === 1,
+        'non-Asia still available when Asia has no data');
 
     if (function_exists('proc_open')) {
         $parallel = $config; $parallel['db_path'] = $dir . '/parallel.db';
