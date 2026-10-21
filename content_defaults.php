@@ -6,9 +6,8 @@
 
 function pmb_default_schedule() {
     return array(
-        array('no'=>1,'gel'=>'I','gel_label'=>'Gelombang Pertama','pendaftaran'=>'6 Maret – 5 Mei 2026','spmb_online'=>'8 Mei – 11 Mei 2026','pengumuman'=>'16 Mei 2026','registrasi'=>'16 Mei – 30 Mei 2026','pkkmb'=>'22 – 27 Agustus 2026','cetak_krs'=>'18 Agustus 2026','color'=>'blue'),
-        array('no'=>2,'gel'=>'II','gel_label'=>'Gelombang Kedua','pendaftaran'=>'6 Mei – 22 Juni 2026','spmb_online'=>'26 Juni – 29 Juni 2026','pengumuman'=>'3 Juli 2026','registrasi'=>'3 Juli – 18 Juli 2026','pkkmb'=>'22 – 27 Agustus 2026','cetak_krs'=>'18 Agustus 2026','color'=>'indigo'),
-        array('no'=>3,'gel'=>'III','gel_label'=>'Gelombang Ketiga','pendaftaran'=>'23 Juni – 3 Agustus 2026','spmb_online'=>'7 – 10 Agustus 2026','pengumuman'=>'13 Agustus 2026','registrasi'=>'13 Agustus – 24 Agustus 2026','pkkmb'=>'22 – 27 Agustus 2026','cetak_krs'=>'18 Agustus 2026','color'=>'sky'),
+        array('no'=>1,'gel'=>'I','gel_label'=>'Gelombang Pertama','pendaftaran'=>'31 Agustus – 17 November 2026','spmb_online'=>'20 – 23 November 2026','pengumuman'=>'26 November 2026','registrasi'=>'26 November – 14 Desember 2026','pkkmb'=>'Reguler B & CS: 30 Januari 2027; Reguler A & CK: 4 Februari 2027','color'=>'blue'),
+        array('no'=>2,'gel'=>'II','gel_label'=>'Gelombang Kedua','pendaftaran'=>'18 November 2026 – 12 Januari 2027','spmb_online'=>'15 – 18 Januari 2027','pengumuman'=>'21 Januari 2027','registrasi'=>'21 – 29 Januari 2027','pkkmb'=>'Reguler B & CS: 30 Januari 2027; Reguler A & CK: 4 Februari 2027','color'=>'indigo'),
     );
 }
 

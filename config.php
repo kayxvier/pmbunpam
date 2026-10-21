@@ -80,7 +80,15 @@ function pmb_content($name, $fallback = null) {
         $fn = 'pmb_default_' . preg_replace('/[^a-z0-9_]/i', '', (string)$name);
         $fallback = function_exists($fn) ? call_user_func($fn) : array();
     }
-    return pmb_load_data($name, $fallback);
+    $data = pmb_load_data($name, $fallback);
+    if ($name === 'schedule' && is_array($data)) {
+        foreach ($data as $row) {
+            if (is_array($row) && (array_key_exists('cetak_krs', $row) || ($row['pendaftaran'] ?? '') === '6 Maret – 5 Mei 2026')) {
+                return $fallback;
+            }
+        }
+    }
+    return $data;
 }
 
 /* ---------------------------------------------------------------------

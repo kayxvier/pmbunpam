@@ -8,7 +8,6 @@ $stage_map = array(
     'pengumuman' => array('Pengumuman', 'si-amber'),
     'registrasi' => array('Registrasi', 'si-emerald'),
     'pkkmb' => array('PKKMB', 'si-rose'),
-    'cetak_krs' => array('Pencetakan KRS', 'si-cyan'),
 );
 $color_map = array('blue'=>'gc-blue','indigo'=>'gc-indigo','sky'=>'gc-sky','violet'=>'gc-indigo','emerald'=>'gc-blue');
 function jadwal_h($value) { return htmlspecialchars((string)$value, ENT_QUOTES, 'UTF-8'); }
@@ -19,7 +18,6 @@ function jadwal_icon($key) {
         'pengumuman'=>'<path d="M4 10v4a1 1 0 0 0 1 1h2l4 4V5L7 9H5a1 1 0 0 0-1 1z"/><path d="M16 9a4 4 0 0 1 0 6"/>',
         'registrasi'=>'<path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/><path d="m9 14 2 2 4-4"/>',
         'pkkmb'=>'<path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12.5V17c0 1.1 2.7 2.5 6 2.5s6-1.4 6-2.5v-4.5"/>',
-        'cetak_krs'=>'<path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="7" rx="2"/><path d="M7 16h10v5H7z"/>',
     );
     return isset($icons[$key]) ? $icons[$key] : '<circle cx="12" cy="12" r="9"/>';
 }

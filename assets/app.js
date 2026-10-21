@@ -237,13 +237,12 @@
       { key:'spmb_online', label:'SPMB Online (Ujian)', c:'#6366f1' },
       { key:'pengumuman', label:'Pengumuman', c:'#f59e0b' },
       { key:'registrasi', label:'Registrasi', c:'#10b981' },
-      { key:'pkkmb', label:'PKKMB', c:'#f43f5e' },
-      { key:'cetak_krs', label:'Cetak KRS', c:'#06b6d4' }
+      { key:'pkkmb', label:'PKKMB', c:'#f43f5e' }
     ];
     /* Jadwal SPMB Semester Genap TA 2026/2027 \u2013 2 gelombang */
     var SCHEDULE = (window.PMB_DATA && Array.isArray(window.PMB_DATA.schedule) && window.PMB_DATA.schedule.length ? window.PMB_DATA.schedule : [
-      { gel:'I',  pendaftaran:'31 Agustus \u2013 17 November 2026', spmb_online:'20 November \u2013 23 November 2026', pengumuman:'26 November 2026', registrasi:'26 November \u2013 14 Desember 2026', pkkmb:'Reguler B & CS: 30 Januari 2027; Reguler A & CK: 4 Februari 2027', cetak_krs:'my.unpam.ac.id mulai tanggal: 27 & 28 Januari 2027' },
-      { gel:'II', pendaftaran:'18 November 2026 \u2013 12 Januari 2027', spmb_online:'15 \u2013 18 Januari 2027', pengumuman:'21 Januari 2027', registrasi:'21 Januari \u2013 29 Januari 2027', pkkmb:'Reguler B & CS: 30 Januari 2027; Reguler A & CK: 4 Februari 2027', cetak_krs:'my.unpam.ac.id mulai tanggal: 27 & 28 Januari 2027' }
+      { gel:'I',  pendaftaran:'31 Agustus \u2013 17 November 2026', spmb_online:'20 November \u2013 23 November 2026', pengumuman:'26 November 2026', registrasi:'26 November \u2013 14 Desember 2026', pkkmb:'Reguler B & CS: 30 Januari 2027; Reguler A & CK: 4 Februari 2027' },
+      { gel:'II', pendaftaran:'18 November 2026 \u2013 12 Januari 2027', spmb_online:'15 \u2013 18 Januari 2027', pengumuman:'21 Januari 2027', registrasi:'21 Januari \u2013 29 Januari 2027', pkkmb:'Reguler B & CS: 30 Januari 2027; Reguler A & CK: 4 Februari 2027' }
     ]);
     function monthIdx(name){ for(var i=0;i<MN.length;i++){ if(name.toLowerCase().indexOf(MN[i].toLowerCase())>-1) return i; } return -1; }
     // parse satu segmen: "17 November 2026", "31 Agustus", "27"

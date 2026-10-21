@@ -461,7 +461,7 @@ input[type=color]{width:42px;height:34px;border:1px solid #d9e1f2;border-radius:
     </div>
     <?php
       $dataset_labels = array(
-        'schedule' => array('Jadwal SPMB', 'Gelombang, tanggal pendaftaran, SPMB, pengumuman, registrasi, PKKMB, dan KRS.'),
+        'schedule' => array('Jadwal SPMB', 'Gelombang, tanggal pendaftaran, SPMB, pengumuman, registrasi, dan PKKMB.'),
         'biaya' => array('Biaya kuliah', 'Daftar kampus/program, biaya registrasi, item biaya, keterangan, diskon, dan total.'),
         'lokasi' => array('Lokasi & program studi', 'Kampus, alamat, fakultas, serta daftar program studi per kampus.'),
         'pkkmb' => array('PKKMB & postingan', 'Toggle postingan, akun Instagram, judul, tanggal, ringkasan, link, gambar, dan status selesai.'),
