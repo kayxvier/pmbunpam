@@ -18,6 +18,9 @@ if ($documents) {
         $grouped[$cat][] = $doc;
     }
 }
+foreach (array_keys($grouped) as $category_name) {
+    if (!in_array($category_name, $kategori_urutan, true)) $kategori_urutan[] = $category_name;
+}
 
 function catStyle($kat){
     if (strpos($kat,'Administrasi')!==false) return ['t-blue','<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/>'];
@@ -152,7 +155,7 @@ h1.title{font-size:clamp(1.55rem,3.4vw,2.3rem);line-height:1.14;font-weight:800;
             <span class="fi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></span>
             <span class="fn"><?= htmlspecialchars($doc["nama"]) ?></span>
             <?php if (!empty($doc["link"])): ?>
-              <a href="<?= htmlspecialchars($doc["link"]) ?>" target="_blank" class="dlbtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/></svg>Unduh</a>
+              <a href="<?= htmlspecialchars($doc["link"], ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener" class="dlbtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/></svg>Unduh</a>
             <?php else: ?>
               <span class="na">N/A</span>
             <?php endif; ?>

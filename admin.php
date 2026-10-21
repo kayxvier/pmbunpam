@@ -11,6 +11,23 @@ $PMB_SESSION_DIR = PMB_DATA_DIR . '/sessions';
 if (!is_dir($PMB_SESSION_DIR)) @mkdir($PMB_SESSION_DIR, 0775, true);
 if (is_dir($PMB_SESSION_DIR) && is_writable($PMB_SESSION_DIR)) @session_save_path($PMB_SESSION_DIR);
 session_start();
+if (empty($_SESSION['pmb_csrf'])) $_SESSION['pmb_csrf'] = bin2hex(random_bytes(24));
+function admin_token() { return '<input type="hidden" name="csrf" value="' . pmb_esc($_SESSION['pmb_csrf']) . '">'; }
+ob_start(function ($html) { return preg_replace('/<form\b[^>]*\bmethod="post"[^>]*>/i', '$0' . admin_token(), $html); });
+function admin_safe_link($url) { return preg_match('~^https?://~i', (string)$url) || preg_match('~^uploads/[a-zA-Z0-9_.-]+$~', (string)$url); }
+function admin_upload_document($field) {
+    if (empty($_FILES[$field]) || $_FILES[$field]['error'] === UPLOAD_ERR_NO_FILE) return '';
+    if ($_FILES[$field]['error'] !== UPLOAD_ERR_OK || $_FILES[$field]['size'] > 15 * 1024 * 1024) return false;
+    $ext = strtolower(pathinfo($_FILES[$field]['name'], PATHINFO_EXTENSION));
+    $allowed = array('pdf','doc','docx','xls','xlsx','ppt','pptx','txt','jpg','jpeg','png','gif','webp');
+    if (!in_array($ext, $allowed, true)) return false;
+    $mime = (new finfo(FILEINFO_MIME_TYPE))->file($_FILES[$field]['tmp_name']);
+    $types = array('application/pdf','application/msword','application/vnd.openxmlformats-officedocument.wordprocessingml.document','application/vnd.ms-excel','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet','application/vnd.ms-powerpoint','application/vnd.openxmlformats-officedocument.presentationml.presentation','application/zip','text/plain','image/jpeg','image/png','image/gif','image/webp');
+    if (!in_array($mime, $types, true)) return false;
+    if (!is_dir(PMB_UPLOAD_DIR)) @mkdir(PMB_UPLOAD_DIR, 0775, true);
+    $name = 'file_' . bin2hex(random_bytes(8)) . '.' . $ext;
+    return move_uploaded_file($_FILES[$field]['tmp_name'], PMB_UPLOAD_DIR . '/' . $name) ? PMB_UPLOAD_URL . '/' . $name : false;
+}
 
 $login_err = '';
 $msg = '';
@@ -18,23 +35,69 @@ $msg = '';
 /* ---- login / logout ---- */
 if (isset($_GET['logout'])) { session_destroy(); header('Location: admin.php'); exit; }
 if (isset($_POST['action']) && $_POST['action'] === 'login') {
-    if (PMB_ADMIN_PASS !== '' && hash_equals(PMB_ADMIN_PASS, (string)(isset($_POST['pass']) ? $_POST['pass'] : ''))) {
-        $_SESSION['pmb_admin'] = true;
+    if (hash_equals($_SESSION['pmb_csrf'], (string)($_POST['csrf'] ?? '')) && password_verify((string)($_POST['pass'] ?? ''), PMB_ADMIN_PASSWORD_HASH)) {
+        session_regenerate_id(true);
+        $_SESSION['pmb_admin'] = hash('sha256', PMB_ADMIN_PASSWORD_HASH);
         header('Location: admin.php'); exit;
-    } else { $login_err = 'Password salah. Coba lagi.'; }
+    } else { $login_err = 'Kata sandi tidak cocok. Silakan coba lagi.'; }
 }
-$IN = !empty($_SESSION['pmb_admin']);
+$IN = is_string($_SESSION['pmb_admin'] ?? null) && hash_equals(hash('sha256', PMB_ADMIN_PASSWORD_HASH), $_SESSION['pmb_admin']);
 
 /* ---- handle data actions ---- */
 if ($IN && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
+    if (!hash_equals($_SESSION['pmb_csrf'], (string)($_POST['csrf'] ?? ''))) { http_response_code(403); exit('Sesi formulir tidak valid. Muat ulang halaman.'); }
     $a = $_POST['action'];
     $P = $_POST;
-    $g = function ($k) use ($P) { return isset($P[$k]) ? trim($P[$k]) : ''; };
+    $g = function ($k) use ($P) { return isset($P[$k]) && is_scalar($P[$k]) ? trim((string)$P[$k]) : ''; };
     $valid_color = function ($value, $fallback) {
         return preg_match('/^#[0-9a-fA-F]{6}$/', (string)$value) ? strtolower($value) : $fallback;
     };
 
-    if ($a === 'save_site') {
+    if ($a === 'save_document') {
+        $docs = pmb_load_json_file(__DIR__ . '/dokumen.json', array());
+        $index = filter_var($g('index'), FILTER_VALIDATE_INT);
+        $old = $index !== false && isset($docs[$index]) ? $docs[$index] : array();
+        $file = admin_upload_document('document_file');
+        $link = $file ?: $g('link');
+        if ($file === false) $msg = 'Berkas gagal diunggah. Gunakan PDF, Office, teks, atau gambar hingga 15 MB.';
+        elseif (!$g('nama') || !$g('kategori') || (!$link && !$old)) $msg = 'Isi nama, kategori, dan tautan atau unggah berkas.';
+        elseif ($link && !admin_safe_link($link)) $msg = 'Tautan harus diawali https:// atau mengarah ke berkas uploads/.';
+        else {
+            $record = array('nama' => $g('nama'), 'link' => $link ?: ($old['link'] ?? ''), 'kategori' => $g('kategori'));
+            if ($old) $docs[$index] = $record; else $docs[] = $record;
+            $msg = pmb_save_json_file(__DIR__ . '/dokumen.json', array_values($docs)) ? 'Dokumen tersimpan.' : 'Dokumen gagal disimpan.';
+        }
+    } elseif ($a === 'delete_document') {
+        $docs = pmb_load_json_file(__DIR__ . '/dokumen.json', array());
+        $index = filter_var($g('index'), FILTER_VALIDATE_INT);
+        if ($index !== false && isset($docs[$index])) {
+            array_splice($docs, $index, 1);
+            $msg = pmb_save_json_file(__DIR__ . '/dokumen.json', $docs) ? 'Dokumen dihapus dari daftar.' : 'Dokumen gagal dihapus.';
+        }
+    } elseif ($a === 'upload_file') {
+        $path = admin_upload_document('library_file');
+        $msg = $path ? 'Berkas berhasil diunggah: ' . $path : 'Unggahan gagal. Gunakan PDF, Office, teks, atau gambar hingga 15 MB.';
+    } elseif ($a === 'delete_file') {
+        $name = basename($g('name'));
+        $path = PMB_UPLOAD_DIR . '/' . $name;
+        $referenced = false;
+        $reference_files = array_merge(glob(PMB_DATA_DIR . '/*.json') ?: array(), glob(__DIR__ . '/*.php') ?: array(), glob(__DIR__ . '/assets/*.{js,css,html}', GLOB_BRACE) ?: array(), array(__DIR__ . '/dokumen.json'));
+        foreach ($reference_files as $source_file) {
+            if (is_file($source_file) && strpos((string)file_get_contents($source_file), 'uploads/' . $name) !== false) $referenced = true;
+        }
+        if ($name !== $g('name') || !preg_match('/^[a-zA-Z0-9_.-]+$/', $name) || $name === '.htaccess' || $name === 'index.html') $msg = 'Nama berkas tidak valid.';
+        elseif ($referenced) $msg = 'Berkas masih dipakai oleh konten. Hapus rujukannya terlebih dahulu.';
+        elseif (is_file($path)) $msg = unlink($path) ? 'Berkas dihapus.' : 'Berkas gagal dihapus.';
+    } elseif ($a === 'save_schedule') {
+        $rows = array();
+        foreach (($P['schedule'] ?? array()) as $row) {
+            if (!is_array($row)) continue;
+            $clean = array();
+            foreach (array('no','gel','gel_label','pendaftaran','spmb_online','pengumuman','registrasi','pkkmb','color') as $key) $clean[$key] = trim((string)($row[$key] ?? ''));
+            if ($clean['gel'] !== '' || $clean['pendaftaran'] !== '') { $clean['no'] = count($rows) + 1; $rows[] = $clean; }
+        }
+        $msg = pmb_save_data('schedule', $rows) ? 'Jadwal tersimpan.' : 'Jadwal gagal disimpan.';
+    } elseif ($a === 'save_site') {
         $S = pmb_settings();
         $S['site']['name'] = $g('site_name') ?: $S['site']['name'];
         $S['site']['organization'] = $g('site_organization') ?: $S['site']['organization'];
@@ -197,6 +260,8 @@ $instagram    = pmb_load('instagram');
 $testimonials = pmb_load('testimonials');
 $tiktok       = pmb_load('tiktok');
 $settings     = pmb_settings();
+$documents = pmb_load_json_file(__DIR__ . '/dokumen.json', array());
+$library = array_values(array_filter(scandir(PMB_UPLOAD_DIR) ?: array(), function ($name) { return $name !== '.' && $name !== '..' && $name !== '.htaccess' && $name !== 'index.html' && is_file(PMB_UPLOAD_DIR . '/' . $name); }));
 $dataset_values = array(
     'schedule' => pmb_content('schedule'),
     'biaya' => pmb_content('biaya'),
@@ -311,38 +376,47 @@ input[type=color]{width:42px;height:34px;border:1px solid #d9e1f2;border-radius:
   .mini-row input{grid-column:2}
 }
 </style>
+<link rel="stylesheet" href="assets/admin-ui.css">
 </head>
 <body>
 
 <?php if (!$IN): ?>
 <div class="login">
   <div class="logo">&#127891;</div>
-  <h2>Admin PMB UNPAM</h2>
-  <p>Masuk untuk mengatur konten halaman.</p>
+  <h2>Masuk ke pengelola situs</h2>
+  <p>PMB Universitas Pamulang</p>
   <?php if ($login_err): ?><div class="err"><?php echo pmb_esc($login_err); ?></div><?php endif; ?>
   <form method="post">
     <input type="hidden" name="action" value="login">
-    <input type="password" name="pass" placeholder="Password" required autofocus>
+    <label for="admin-password">Kata sandi admin</label>
+    <input id="admin-password" type="password" name="pass" autocomplete="current-password" required autofocus>
     <button type="submit">Masuk</button>
   </form>
 </div>
 
 <?php else: ?>
-<div class="top">
-  <div><h1 style="display:inline">Admin PMB UNPAM</h1><span class="badge">CMS situs</span></div>
-  <a class="out" href="admin.php?logout=1">Keluar</a>
-</div>
+<div class="admin-shell">
+<aside class="admin-sidebar" aria-label="Navigasi admin">
+  <a class="brand" href="admin.php"><span class="brand-mark">U</span><span><strong>PMB UNPAM</strong><small>Pengelola situs</small></span></a>
+  <p class="nav-caption">KONTEN SITUS</p>
+  <nav class="tabs" aria-label="Bagian pengelolaan">
+    <button type="button" class="on" data-p="p-site">⌂ <span>Tampilan &amp; teks</span></button>
+    <button type="button" data-p="p-schedule">◷ <span>Jadwal</span></button>
+    <button type="button" data-p="p-docs">▤ <span>Dokumen unduhan</span></button>
+    <button type="button" data-p="p-files">▣ <span>Berkas &amp; gambar</span></button>
+    <button type="button" data-p="p-data">{ } <span>Data lanjutan</span></button>
+    <p class="nav-caption">PUBLIKASI</p>
+    <button type="button" data-p="p-hl">◈ <span>Highlights</span></button>
+    <button type="button" data-p="p-ig">◎ <span>Instagram</span></button>
+    <button type="button" data-p="p-ts">❞ <span>Testimoni</span></button>
+    <button type="button" data-p="p-tt">▶ <span>TikTok</span></button>
+  </nav>
+  <div class="sidebar-bottom"><a href="front.php" target="_blank" rel="noopener">Lihat situs ↗</a><a href="admin.php?logout=1">Keluar</a></div>
+</aside>
+<div class="admin-main">
+<div class="top"><div><span class="eyebrow">PANEL KONTEN</span><h1>Kelola situs PMB</h1><p>Perbarui informasi, dokumen, dan materi publik dari satu tempat.</p></div><a class="out" href="front.php" target="_blank" rel="noopener">Lihat situs ↗</a></div>
 <div class="wrap">
   <?php if ($msg): ?><div class="msg">&#10003; <?php echo pmb_esc($msg); ?></div><?php endif; ?>
-
-  <div class="tabs">
-    <button class="on" data-p="p-site">&#9881; Tampilan Situs</button>
-    <button data-p="p-data">&#128221; Data Semua Halaman</button>
-    <button data-p="p-hl">&#128240; Highlights</button>
-    <button data-p="p-ig">&#128247; Highlight Instagram</button>
-    <button data-p="p-ts">&#128172; Testimoni</button>
-    <button data-p="p-tt">&#127909; Video TikTok</button>
-  </div>
 
   <!-- ============ TAMPILAN SITUS ============ -->
   <div class="panel on" id="p-site">
@@ -451,6 +525,50 @@ input[type=color]{width:42px;height:34px;border:1px solid #d9e1f2;border-radius:
       <button class="save-wide" type="submit">Simpan semua pengaturan situs</button>
     </form>
   </div>
+
+  <section class="panel" id="p-schedule" aria-labelledby="schedule-heading">
+    <div class="panel-head"><div><span class="eyebrow">TANGGAL PENTING</span><h2 id="schedule-heading">Jadwal SPMB</h2><p>Ubah tanggal dan nama gelombang. Setiap baris tampil di halaman jadwal.</p></div></div>
+    <form method="post" id="schedule-form">
+      <input type="hidden" name="action" value="save_schedule">
+      <div id="schedule-rows">
+      <?php foreach ($dataset_values['schedule'] as $si => $sr): ?>
+        <div class="setting-block schedule-row">
+          <div class="row-heading"><h3>Gelombang <span class="row-number"><?php echo $si + 1; ?></span></h3><button type="button" class="text-danger remove-row">Hapus baris</button></div>
+          <div class="settings-grid">
+            <div><label>Kode gelombang</label><input name="schedule[<?php echo $si; ?>][gel]" value="<?php echo pmb_esc($sr['gel'] ?? ''); ?>" placeholder="I"></div>
+            <div><label>Nama gelombang</label><input name="schedule[<?php echo $si; ?>][gel_label]" value="<?php echo pmb_esc($sr['gel_label'] ?? ''); ?>" placeholder="Gelombang Pertama"></div>
+            <?php foreach (array('pendaftaran'=>'Pendaftaran','spmb_online'=>'Ujian SPMB online','pengumuman'=>'Pengumuman','registrasi'=>'Registrasi','pkkmb'=>'PKKMB') as $sk => $sl): ?>
+            <div><label><?php echo $sl; ?></label><input name="schedule[<?php echo $si; ?>][<?php echo $sk; ?>]" value="<?php echo pmb_esc($sr[$sk] ?? ''); ?>" placeholder="Contoh: 1 – 15 Januari 2027"></div>
+            <?php endforeach; ?>
+            <div><label>Warna penanda</label><select name="schedule[<?php echo $si; ?>][color]"><?php foreach (array('blue'=>'Biru','indigo'=>'Nila','violet'=>'Ungu','teal'=>'Toska') as $color => $label): ?><option value="<?php echo $color; ?>" <?php echo ($sr['color'] ?? '') === $color ? 'selected' : ''; ?>><?php echo $label; ?></option><?php endforeach; ?></select></div>
+          </div>
+        </div>
+      <?php endforeach; ?>
+      </div>
+      <div class="form-footer"><button type="button" class="secondary-btn" id="add-schedule">+ Tambah gelombang</button><button type="submit" class="primary-btn">Simpan jadwal</button></div>
+    </form>
+  </section>
+
+  <section class="panel" id="p-docs" aria-labelledby="docs-heading">
+    <div class="panel-head"><div><span class="eyebrow">PUSAT UNDUHAN</span><h2 id="docs-heading">Dokumen unduhan</h2><p>Tambahkan dokumen, ganti tautan Google Drive, atau unggah berkas langsung.</p></div><a href="download.php" target="_blank" rel="noopener">Lihat halaman ↗</a></div>
+    <div class="setting-block"><h3>Tambah dokumen</h3><form method="post" enctype="multipart/form-data"><input type="hidden" name="action" value="save_document"><div class="settings-grid"><div><label>Nama dokumen</label><input name="nama" required placeholder="Contoh: Panduan Pendaftaran"></div><div><label>Kategori</label><input name="kategori" list="doc-categories" required placeholder="Pilih atau tulis kategori"></div><div><label>Tautan Google Drive / situs</label><input name="link" type="url" placeholder="https://drive.google.com/..."></div><div><label>Atau unggah berkas</label><input type="file" name="document_file" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,image/*"><small>PDF, Office, teks, gambar. Maksimal 15 MB.</small></div></div><button class="primary-btn" type="submit">Tambah dokumen</button></form></div>
+    <datalist id="doc-categories"><?php foreach (array_unique(array_column($documents, 'kategori')) as $cat): ?><option value="<?php echo pmb_esc($cat); ?>"><?php endforeach; ?></datalist>
+    <h3 class="list-title">Dokumen terbit <span><?php echo count($documents); ?></span></h3>
+    <?php if (!$documents): ?><p class="empty-state">Belum ada dokumen. Tambahkan satu lewat formulir di atas.</p><?php endif; ?>
+    <div class="document-list">
+    <?php foreach ($documents as $di => $doc): ?>
+      <div class="setting-block document-item"><form method="post" enctype="multipart/form-data"><input type="hidden" name="action" value="save_document"><input type="hidden" name="index" value="<?php echo $di; ?>"><div class="settings-grid"><div><label>Nama dokumen</label><input name="nama" value="<?php echo v($doc, 'nama'); ?>" required></div><div><label>Kategori</label><input name="kategori" list="doc-categories" value="<?php echo v($doc, 'kategori'); ?>" required></div><div class="wide-field"><label>Tautan unduh</label><input name="link" value="<?php echo v($doc, 'link'); ?>" placeholder="https://drive.google.com/..."></div><div><label>Ganti dengan berkas baru</label><input type="file" name="document_file" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,image/*"></div></div><div class="item-actions"><button type="submit" class="primary-btn">Simpan perubahan</button><?php if (!empty($doc['link']) && admin_safe_link($doc['link'])): ?><a href="<?php echo v($doc, 'link'); ?>" target="_blank" rel="noopener">Buka tautan ↗</a><?php endif; ?><button class="text-danger" type="submit" form="remove-doc-<?php echo $di; ?>" formnovalidate onclick="return confirm('Hapus dokumen ini dari daftar?')">Hapus</button></div></form><form id="remove-doc-<?php echo $di; ?>" method="post"><input type="hidden" name="action" value="delete_document"><input type="hidden" name="index" value="<?php echo $di; ?>"></form></div>
+    <?php endforeach; ?>
+    </div>
+  </section>
+
+  <section class="panel" id="p-files" aria-labelledby="files-heading">
+    <div class="panel-head"><div><span class="eyebrow">PERPUSTAKAAN ASET</span><h2 id="files-heading">Berkas &amp; gambar</h2><p>Unggah file untuk dipakai di dokumen, postingan, atau halaman lain. Salin alamat berkas setelah diunggah.</p></div></div>
+    <div class="setting-block"><form method="post" enctype="multipart/form-data" class="upload-line"><input type="hidden" name="action" value="upload_file"><div><label>Pilih berkas baru</label><input type="file" name="library_file" required accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,image/*"></div><button type="submit" class="primary-btn">Unggah berkas</button></form><p class="hint">Batas 15 MB. Berkas di folder uploads/ yang sedang dirujuk konten harus dilepas dari konten sebelum bisa dihapus.</p></div>
+    <h3 class="list-title">Berkas tersimpan <span><?php echo count($library); ?></span></h3>
+    <?php if (!$library): ?><p class="empty-state">Belum ada berkas di folder uploads.</p><?php endif; ?>
+    <div class="file-list"><?php foreach ($library as $file): $path = 'uploads/' . $file; $is_image = (bool)preg_match('/\.(png|jpe?g|gif|webp)$/i', $file); ?><div class="file-item"><div class="file-icon"><?php if ($is_image): ?><img src="<?php echo pmb_esc($path); ?>" alt="" loading="lazy"><?php else: ?>▤<?php endif; ?></div><div class="file-meta"><strong><?php echo pmb_esc($file); ?></strong><small><?php echo number_format(filesize(PMB_UPLOAD_DIR . '/' . $file) / 1024, 0, ',', '.'); ?> KB</small></div><div class="file-actions"><button type="button" class="copy-path" data-path="<?php echo pmb_esc($path); ?>">Salin alamat</button><a href="<?php echo pmb_esc($path); ?>" target="_blank" rel="noopener">Buka ↗</a><form method="post" onsubmit="return confirm('Hapus berkas ini? Pastikan tidak dipakai halaman publik.')"><input type="hidden" name="action" value="delete_file"><input type="hidden" name="name" value="<?php echo pmb_esc($file); ?>"><button type="submit" class="text-danger">Hapus</button></form></div></div><?php endforeach; ?></div>
+  </section>
 
   <!-- ============ DATA TERSTRUKTUR ============ -->
   <div class="panel" id="p-data">
@@ -651,7 +769,6 @@ input[type=color]{width:42px;height:34px;border:1px solid #d9e1f2;border-radius:
       <?php endforeach; ?>
     </div>
   </div>
-</div>
 
   <!-- ============ VIDEO TIKTOK ============ -->
   <div class="panel" id="p-tt">
@@ -707,19 +824,41 @@ input[type=color]{width:42px;height:34px;border:1px solid #d9e1f2;border-radius:
     <p class="crophint" id="crophint"></p>
   </div>
 </div>
+</div>
+</div>
 
 <script>
 (function(){
   var tabs=document.querySelectorAll('.tabs button');
   var panels=document.querySelectorAll('.panel');
+  function select(id){
+    var target=document.getElementById(id);
+    if(!target || !target.classList.contains('panel')) return;
+    tabs.forEach(function(x){ x.classList.toggle('on',x.getAttribute('data-p')===id); x.setAttribute('aria-current',x.getAttribute('data-p')===id?'page':'false'); });
+    panels.forEach(function(x){ x.classList.toggle('on',x===target); });
+    try{sessionStorage.setItem('pmbAdminPanel',id);}catch(e){}
+  }
   tabs.forEach(function(b){
     b.addEventListener('click',function(){
-      tabs.forEach(function(x){ x.classList.remove('on'); });
-      panels.forEach(function(x){ x.classList.remove('on'); });
-      b.classList.add('on');
-      document.getElementById(b.getAttribute('data-p')).classList.add('on');
+      select(b.getAttribute('data-p'));
+      window.scrollTo(0,0);
     });
   });
+  try{select(sessionStorage.getItem('pmbAdminPanel')||'p-site');}catch(e){select('p-site');}
+  document.querySelectorAll('.copy-path').forEach(function(button){button.addEventListener('click',function(){navigator.clipboard.writeText(button.getAttribute('data-path')).then(function(){button.textContent='Tersalin ✓';setTimeout(function(){button.textContent='Salin alamat';},1800);});});});
+  var scheduleRows=document.getElementById('schedule-rows');
+  var addSchedule=document.getElementById('add-schedule');
+  if(addSchedule && scheduleRows){
+    addSchedule.addEventListener('click',function(){
+      var index=Date.now();
+      var row=document.createElement('div');row.className='setting-block schedule-row';
+      row.innerHTML='<div class="row-heading"><h3>Gelombang <span class="row-number">'+(index+1)+'</span></h3><button type="button" class="text-danger remove-row">Hapus baris</button></div><div class="settings-grid">'+[
+        ['gel','Kode gelombang'],['gel_label','Nama gelombang'],['pendaftaran','Pendaftaran'],['spmb_online','Ujian SPMB online'],['pengumuman','Pengumuman'],['registrasi','Registrasi'],['pkkmb','PKKMB']
+      ].map(function(pair){return '<div><label>'+pair[1]+'</label><input name="schedule['+index+']['+pair[0]+']"></div>';}).join('')+'<div><label>Warna penanda</label><select name="schedule['+index+'][color]"><option value="blue">Biru</option><option value="indigo">Nila</option><option value="violet">Ungu</option><option value="teal">Toska</option></select></div></div>';
+      scheduleRows.appendChild(row);row.querySelector('input').focus();
+    });
+    scheduleRows.addEventListener('click',function(event){if(event.target.classList.contains('remove-row')){event.target.closest('.schedule-row').remove();Array.from(scheduleRows.children).forEach(function(row,i){row.querySelector('.row-number').textContent=i+1;});}});
+  }
 })();
 
 (function(){

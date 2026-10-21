@@ -9,15 +9,17 @@ define('PMB_UPLOAD_DIR', __DIR__ . '/uploads');
 define('PMB_UPLOAD_URL', 'uploads');
 define('PMB_SETTINGS_FILE', PMB_DATA_DIR . '/site.json');
 
-// Kredensial hanya berasal dari environment atau file lokal yang di-ignore.
+// Hash bawaan untuk rilis ini; konfigurasi hash privat dapat menggantikannya.
 $pmb_local_config_file = __DIR__ . '/config.local.php';
 $pmb_local_config = is_file($pmb_local_config_file) ? require $pmb_local_config_file : array();
-$pmb_admin_password = getenv('PMB_ADMIN_PASS');
-if ($pmb_admin_password === false) {
-    $pmb_admin_password = is_array($pmb_local_config) ? ($pmb_local_config['admin_password'] ?? '') : '';
+$pmb_admin_hash = getenv('PMB_ADMIN_PASSWORD_HASH');
+if ($pmb_admin_hash === false || $pmb_admin_hash === '') {
+    $pmb_admin_hash = is_array($pmb_local_config) && !empty($pmb_local_config['admin_password_hash'])
+        ? $pmb_local_config['admin_password_hash']
+        : '$2y$12$sDRldu0nu8q7oM8gRLfHPOGJiXfavhzCYChGy9Rem83EJ2Gy9KGh6';
 }
-define('PMB_ADMIN_PASS', (string)$pmb_admin_password);
-unset($pmb_admin_password, $pmb_local_config, $pmb_local_config_file);
+define('PMB_ADMIN_PASSWORD_HASH', (string)$pmb_admin_hash);
+unset($pmb_admin_hash, $pmb_local_config, $pmb_local_config_file);
 
 require_once __DIR__ . '/content_defaults.php';
 

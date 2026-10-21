@@ -34,11 +34,11 @@ Workflow memakai [FTP-Deploy-Action v4.4.0](https://github.com/SamKirkland/FTP-D
    gunakan `./`; jika root FTP adalah `/home/pmbs2545/`, gunakan
    `public_html/simaba.my.id/`. Pastikan root akun melalui cPanel/FileZilla
    agar tidak membuat folder domain bertingkat di lokasi yang salah.
-4. Sebelum deploy pertama, melalui File Manager cPanel salin `config.example.php`
-   menjadi `config.local.php` di folder domain, lalu isi `admin_password` dengan
-   password baru. Jangan memakai kembali password lama yang sebelumnya berada
-   dalam kode. Alternatifnya gunakan environment `PMB_ADMIN_PASS` dari hosting.
-   Tanpa password terpasang, halaman publik tetap berjalan dan login admin ditolak.
+4. Login admin memakai hash kata sandi rilis dari `config.php`. Untuk menggantinya,
+   buat hash dengan `php -r 'echo password_hash("kata-sandi-baru", PASSWORD_BCRYPT), PHP_EOL;'`
+   lalu atur environment `PMB_ADMIN_PASSWORD_HASH` di hosting, atau simpan sebagai
+   `admin_password_hash` di `config.local.php`. Nilai lama `PMB_ADMIN_PASS` dan
+   `admin_password` tidak lagi dipakai. Jangan simpan kata sandi biasa di Git.
 5. Data operasional hosting dipertahankan: `data/**/*.json`, `peserta.json`,
    `dokumen.json`, `toggle.php`, `uploads/`, sesi, dan `config.local.php` tidak
    di-upload maupun dihapus workflow. Untuk instalasi baru, salin data publik,
